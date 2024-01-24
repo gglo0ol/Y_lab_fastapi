@@ -1,13 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-# from core.config import Settings
+from core.config import settings
 
 from uuid import uuid4
 
 
-DATABASE_URL = "postgresql://postgres:y_lab@localhost:5432/"        # Нужно использовать какое то другое имя БД
 Base = declarative_base()
-engine = create_engine(DATABASE_URL)
+engine = create_engine(settings.DB_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
