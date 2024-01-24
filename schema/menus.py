@@ -1,10 +1,18 @@
-from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from DataBase import Menu, Submenu, Dish, BaseModel
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship, Session
+from pydantic import BaseModel
+
+
+from DataBase import Base, get_uuid
+from schema.dishes import Dish
+from schema.submenus import Submenu
+
 
 class MenuBase(BaseModel):
     title: str
     description: str
+
 
 class MenuResponse(MenuBase):
     id: str
@@ -13,27 +21,39 @@ class MenuResponse(MenuBase):
     submenus_count: int
     dishes_count: int
 
+
 class MenuCreate(MenuBase):
     title: str
     description: str
+
 
 class MenuUpdate(MenuBase):
     title: str
     description: str
 
 
+class Menu(Base):
+    __tablename__ = "menus"
+    id = Column(String, primary_key=True, default=get_uuid, unique=True)
+    title = Column(String)
+    description = Column(String)
+    submenus = relationship("Submenu", back_populates="menu", cascade="all, delete-orphan")
+
+
 def get_menu_data(db: Session, menu_id: str):
-    db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
+    db_menu = db.query(Menu).filter(Menu.id==menu_id).first()
     if db_menu:
         return {
                 "id": db_menu.id,
                 "title": db_menu.title,
                 "description": db_menu.description,
                 "submenus_count": db.query(Submenu, Menu).join(Submenu, Submenu.menu_id==db_menu.id).count(),
-                "dishes_count": db.query(Submenu, Menu).join(Submenu, Submenu.menu_id==db_menu.id).join(Dish, Dish.submenu_id==Submenu.id).count()
+                "dishes_count": db.query(Submenu, Menu).join(Submenu, Submenu.menu_id==db_menu.id).join(
+                    Dish, Dish.submenu_id==Submenu.id).count()
                 }
     else:
         raise HTTPException(status_code=404, detail="menu not found")
+
 
 def get_all_menus(db: Session):
     db_menu = db.query(Menu).all()
@@ -41,6 +61,7 @@ def get_all_menus(db: Session):
         get_menu_data(menu_id=menu.id, db=db)
         for menu in db_menu
     ]
+
 
 def create_menu(db: Session, menu_title: str, description: str):
     db_menu = Menu(title=menu_title, description=description)
@@ -55,6 +76,7 @@ def create_menu(db: Session, menu_title: str, description: str):
         "dishes_count": 0
     }
 
+
 def update_menu_data(db: Session, menu_id: str, new_title: str, new_description: str):
     db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
     if db_menu:
@@ -64,6 +86,7 @@ def update_menu_data(db: Session, menu_id: str, new_title: str, new_description:
         return get_menu_data(db, menu_id=menu_id)
     else:
         return {'detail': 'menu not found'}
+
 
 def delete_menu_data(db: Session, menu_id: str):
     db_menu = db.query(Menu).filter(Menu.id == menu_id).first()

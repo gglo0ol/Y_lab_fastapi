@@ -1,12 +1,17 @@
-from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from DataBase import Submenu, Dish
-from DataBase import BaseModel
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship, Session
+from pydantic import BaseModel
+
+
+from DataBase import get_uuid, Base
+from schema.dishes import Dish
+
 
 class SubmenuCreate(BaseModel):
-
     title: str
     description: str
+
 
 class SubmenuResponse(BaseModel):
     id: str
@@ -14,6 +19,16 @@ class SubmenuResponse(BaseModel):
     title: str
     description: str
     dishes_count: int
+
+
+class Submenu(Base):
+    __tablename__ = 'submenus'
+    id = Column(String, primary_key=True, default=get_uuid, unique=True)
+    menu_id = Column(String, ForeignKey("menus.id"))
+    title = Column(String)
+    description = Column(String)
+    menu = relationship("Menu", back_populates="submenus")
+    dishes = relationship("Dish", back_populates="submenu", cascade="all, delete-orphan")
 
 
 def get_submenu_data(db: Session, submenu_id: str, menu_id: str):

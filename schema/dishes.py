@@ -1,17 +1,33 @@
-from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from DataBase import Submenu, Menu, BaseModel, Dish
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship, Session
+from pydantic import BaseModel
+
+
+from DataBase import Base, get_uuid
+
 
 class DishCreate(BaseModel):
-
     title: str
     description: str
     price: str
+
 
 class DishResponse(BaseModel):
     title: str
     description: str
     price: str
+
+
+class Dish(Base):
+    __tablename__ = 'dishes'
+    id = Column(String, primary_key=True, default=get_uuid, unique=True)
+    title = Column(String)
+    description = Column(String)
+    price = Column(String)
+    submenu_id = Column(String, ForeignKey("submenus.id"))
+
+    submenu = relationship("Submenu", back_populates="dishes")
 
 
 def create_dish(submenu_id: str, dish_title: str, dish_description: str, dish_price: str, db: Session):

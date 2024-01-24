@@ -14,7 +14,6 @@ from schema.dishes import (get_dish_data, get_all_dishes_data, create_dish, Dish
 app = FastAPI()
 
 
-
 @app.post("/api/v1/menus", status_code=201)
 def create_menu_endpoint(get_request: MenuCreate, db: Session = Depends(get_db)):
     return create_menu(db, get_request.title, get_request.description)
@@ -23,6 +22,7 @@ def create_menu_endpoint(get_request: MenuCreate, db: Session = Depends(get_db))
 @app.get("/api/v1/menus", response_model=List[MenuResponse])
 def get_all_menus_endpoint(db: Session = Depends(get_db)):
     return get_all_menus(db)
+
 
 @app.get("/api/v1/menus/{menu_id}")
 def get_menu(menu_id: str, db: Session = Depends(get_db)):
@@ -53,9 +53,11 @@ def get_submenu(menu_id: str, submenu_id: str, db: Session = Depends(get_db)):
 def get_all_submenu(menu_id: str, db: Session = Depends(get_db)):
     return get_all_submenu_data(menu_id=menu_id, db=db)
 
+
 @app.patch("/api/v1/menus/{menu_id}/submenus/{submenu_id}")
 def update_submenu(menu_id: str, submenu_id: str, data_in: SubmenuCreate, db: Session = Depends(get_db)):
-    return update_submenu_data(submenu_id=submenu_id, new_submenu_title=data_in.title, new_submenu_description=data_in.description, db=db)
+    return update_submenu_data(submenu_id=submenu_id, new_submenu_title=data_in.title,
+                               new_submenu_description=data_in.description, db=db)
 
 
 @app.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}")
@@ -63,12 +65,10 @@ def delete_submenu(menu_id: str, submenu_id: str, db: Session = Depends(get_db))
     return delete_submenu_data(submenu_id=submenu_id, db=db)
 
 
-
-
-
 @app.post("/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes", status_code=201)
 def create_dish_endpoint(menu_id: str, submenu_id: str, data_in: DishCreate, db: Session = Depends(get_db)):
-    return create_dish(submenu_id=submenu_id, dish_title=data_in.title, dish_description=data_in.description, dish_price=data_in.price, db=db)
+    return create_dish(submenu_id=submenu_id, dish_title=data_in.title, dish_description=data_in.description,
+                       dish_price=data_in.price, db=db)
 
 
 @app.get("/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}")
@@ -87,8 +87,6 @@ def delete_dish(menu_id: str, submenu_id: str, dish_id: str, db: Session = Depen
     return delete_dish_data(dish_id=dish_id, db=db)
 
 
-
-
 @app.get("/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes")
 def get_all_dishes(menu_id: str, submenu_id: str, db: Session = Depends(get_db)):
     print(menu_id, submenu_id)
@@ -96,7 +94,5 @@ def get_all_dishes(menu_id: str, submenu_id: str, db: Session = Depends(get_db))
 
 
 if __name__ == "__main__":
-    # DataBase.delete_entire_database()
     import uvicorn
-
     uvicorn.run(app, host="127.0.0.1", port=8000)
