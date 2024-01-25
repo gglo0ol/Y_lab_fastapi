@@ -12,6 +12,7 @@ app.include_router(menu_router)
 app.include_router(submenu_router)
 app.include_router(dishes_router)
 
+
 @app.on_event("startup")
 def start_db():
     Base.metadata.create_all(bind=engine)

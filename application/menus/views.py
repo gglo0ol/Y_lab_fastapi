@@ -2,10 +2,16 @@ from typing import List
 
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
+
+
 from menus.schemas import MenuUpdate, MenuResponse, MenuCreate
-
-
-from menus.crud import create_menu, get_all_menus, get_menu_data, update_menu_data, delete_menu_data
+from menus.crud import (
+    create_menu,
+    get_all_menus,
+    get_menu_data,
+    update_menu_data,
+    delete_menu_data,
+)
 from core.db import get_db
 
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
@@ -28,7 +34,12 @@ def get_menu(menu_id: str, db: Session = Depends(get_db)):
 
 @router.patch("/{menu_id}/")
 def update_menu(menu_id: str, get_update: MenuUpdate, db: Session = Depends(get_db)):
-    return update_menu_data(db, menu_id=menu_id, new_title=get_update.title, new_description=get_update.description)
+    return update_menu_data(
+        db,
+        menu_id=menu_id,
+        new_title=get_update.title,
+        new_description=get_update.description,
+    )
 
 
 @router.delete("/{menu_id}/")

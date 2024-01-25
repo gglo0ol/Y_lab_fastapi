@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from application.core.config import settings
+from core.config import settings
 
 from uuid import uuid4
 
@@ -22,4 +22,3 @@ def get_db():
 
 def get_uuid():
     return str(uuid4())
-

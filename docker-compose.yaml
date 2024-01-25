@@ -1,15 +1,27 @@
 version: '3.8'
 
 services:
-
   database:
     image: postgres:15.1-alpine
     restart: always
     container_name: database
-
     expose:
       - "5432"
     ports:
       - "5432:5432"
     env_file:
       - .env
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    networks:
+      - ylab_network
+    ports:
+      - "8000:80"
+networks:
+  ylab_network:
+    name: ylab_network
+
