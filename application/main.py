@@ -12,9 +12,12 @@ app.include_router(menu_router)
 app.include_router(submenu_router)
 app.include_router(dishes_router)
 
+@app.on_event("startup")
+def start_db():
+    Base.metadata.create_all(bind=engine)
 
 
 if __name__ == "__main__":
     import uvicorn
-    Base.metadata.create_all(bind=engine)
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

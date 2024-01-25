@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from core.config import settings
+from application.core.config import settings
 
 from uuid import uuid4
 
 
 Base = declarative_base()
-engine = create_engine(settings.DB_URL)
+engine = create_engine(settings.connection_db)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
@@ -23,5 +23,3 @@ def get_db():
 def get_uuid():
     return str(uuid4())
 
-
-Base.metadata.create_all(bind=engine)
