@@ -5,6 +5,8 @@ services:
     image: postgres:15.1-alpine
     restart: always
     container_name: database
+    networks:
+      - ylab_network
     expose:
       - "5432"
     ports:
@@ -21,6 +23,8 @@ services:
       - ylab_network
     ports:
       - "8000:80"
+    env_file:
+      - .env
 networks:
   ylab_network:
     name: ylab_network
