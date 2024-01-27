@@ -27,7 +27,7 @@ def get_all_menus_endpoint(db: Session = Depends(get_db)):
     return get_all_menus(db)
 
 
-@router.get("/{menu_id}/")
+@router.get("/{menu_id}/", response_model=MenuResponse)
 def get_menu(menu_id: str, db: Session = Depends(get_db)):
     return get_menu_data(db, menu_id=menu_id)
 
