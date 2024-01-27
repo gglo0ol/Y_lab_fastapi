@@ -10,14 +10,14 @@ from submenus.crud import (
     create_submenu,
     delete_submenu_data,
 )
-from submenus.schemas import SubmenuUpdate, SubmenuResponse, SubmenuCreate
+from submenus.schemas import SubmenuResponse, SubmenuCreate
 from core.db import get_db
 
 
-router = APIRouter(tags=["Submenus"])  # add prefix="/api/v1/menus/{menu_id}/submenus"
+router = APIRouter(tags=["Submenus"], prefix="/api/v1/menus/{menu_id}/submenus")
 
 
-@router.post("/api/v1/menus/{menu_id}/submenus", status_code=201)
+@router.post("/", status_code=201, response_model=SubmenuResponse)
 def create_submenu_endpoint(
     menu_id: str, data_in: SubmenuCreate, db: Session = Depends(get_db)
 ):
@@ -29,17 +29,17 @@ def create_submenu_endpoint(
     )
 
 
-@router.get("/api/v1/menus/{menu_id}/submenus/{submenu_id}")
+@router.get("/{submenu_id}", response_model=SubmenuResponse)
 def get_submenu(menu_id: str, submenu_id: str, db: Session = Depends(get_db)):
     return get_submenu_data(submenu_id=submenu_id, menu_id=menu_id, db=db)
 
 
-@router.get("/api/v1/menus/{menu_id}/submenus", response_model=List[SubmenuResponse])
+@router.get("/", response_model=List[SubmenuResponse])
 def get_all_submenu(menu_id: str, db: Session = Depends(get_db)):
     return get_all_submenu_data(menu_id=menu_id, db=db)
 
 
-@router.patch("/api/v1/menus/{menu_id}/submenus/{submenu_id}")
+@router.patch("/{submenu_id}", response_model=SubmenuResponse)
 def update_submenu(
     menu_id: str, submenu_id: str, data_in: SubmenuCreate, db: Session = Depends(get_db)
 ):
@@ -51,6 +51,6 @@ def update_submenu(
     )
 
 
-@router.delete("/api/v1/menus/{menu_id}/submenus/{submenu_id}")
+@router.delete("/{submenu_id}")
 def delete_submenu(menu_id: str, submenu_id: str, db: Session = Depends(get_db)):
     return delete_submenu_data(submenu_id=submenu_id, db=db)

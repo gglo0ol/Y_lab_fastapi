@@ -17,8 +17,3 @@ class MenuResponse(MenuBase):
 class MenuCreate(MenuBase):
     title: str
     description: str
-
-
-class MenuUpdate(MenuBase):
-    title: str
-    description: str

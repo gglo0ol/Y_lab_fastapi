@@ -12,11 +12,3 @@ class SubmenuResponse(BaseModel):
     title: str
     description: str
     dishes_count: int
-
-
-class SubmenuUpdate(BaseModel):
-    id: str
-    menu_id: str
-    title: str
-    description: str
-    dishes_count: int

@@ -8,12 +8,7 @@ class DishCreate(BaseModel):
 
 
 class DishResponse(BaseModel):
-    title: str
-    description: str
-    price: str
-
-
-class DishUpdate(BaseModel):
+    id: str
     title: str
     description: str
     price: str

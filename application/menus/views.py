@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 
 
-from menus.schemas import MenuUpdate, MenuResponse, MenuCreate
+from menus.schemas import MenuResponse, MenuCreate
 from menus.crud import (
     create_menu,
     get_all_menus,
@@ -17,7 +17,7 @@ from core.db import get_db
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
 
 
-@router.post("/", status_code=201)
+@router.post("/", status_code=201, response_model=MenuResponse)
 def create_menu_endpoint(get_request: MenuCreate, db: Session = Depends(get_db)):
     return create_menu(db, get_request.title, get_request.description)
 
@@ -32,8 +32,8 @@ def get_menu(menu_id: str, db: Session = Depends(get_db)):
     return get_menu_data(db, menu_id=menu_id)
 
 
-@router.patch("/{menu_id}/")
-def update_menu(menu_id: str, get_update: MenuUpdate, db: Session = Depends(get_db)):
+@router.patch("/{menu_id}/", response_model=MenuResponse)
+def update_menu(menu_id: str, get_update: MenuCreate, db: Session = Depends(get_db)):
     return update_menu_data(
         db,
         menu_id=menu_id,
