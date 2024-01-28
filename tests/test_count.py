@@ -1,9 +1,7 @@
-from tests.conftest import client
 from tests.test_menu_crud import (
     create_menu,
     delete_menu,
     check_empty_menu_list,
-    check_not_empty_menu_list,
     check_menu,
 )
 from tests.test_submenu_crud import (
@@ -14,9 +12,7 @@ from tests.test_submenu_crud import (
 )
 from tests.test_dishes_crud import (
     create_dish,
-    delete_dish,
     check_dish_empty_list,
-    check_dish,
 )
 
 

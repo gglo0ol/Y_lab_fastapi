@@ -2,12 +2,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 
-from core.config import POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD
-from core.db import Base, get_db
-from main import app
+from application.core.config import (
+    POSTGRES_USER,
+    POSTGRES_DB,
+    POSTGRES_PASSWORD,
+    DB_HOST,
+)
+from application.core.db import Base, get_db
+from application.main import app
 
 
-DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5555/{POSTGRES_DB}"  # localhost:5555
+DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}/{POSTGRES_DB}"  # localhost:5555
 
 test_engine = create_engine(url=DATABASE_URL_TEST)
 Test_session = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)

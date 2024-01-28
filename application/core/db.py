@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from core.config import settings
+from application.core.config import settings
 
 from uuid import uuid4
 

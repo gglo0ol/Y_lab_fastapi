@@ -2,7 +2,6 @@ from tests.conftest import client
 from tests.test_menu_crud import (
     create_menu,
     delete_menu,
-    get_all_menus,
     check_empty_menu_list,
 )
 from tests.test_submenu_crud import (

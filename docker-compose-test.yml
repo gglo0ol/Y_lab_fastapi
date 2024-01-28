@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15.1-alpine
+    restart: always
+    container_name: test_db
+    networks:
+      - ylab_network
+    expose:
+      - "5555"
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env_test
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    networks:
+      - ylab_network
+    ports:
+      - "8000:80"
+    env_file:
+      - .env_test
+    depends_on:
+      database:
+        condition: service_healthy
+    command: sh -c "pytest -v"
+networks:
+  ylab_network:
+    name: ylab_network
+
