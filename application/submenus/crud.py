@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 
-from application.core.models.base import Submenu, Dish
+from core.models.base import Submenu, Dish
 
 
 def get_submenu_data(db: Session, submenu_id: str, menu_id: str):

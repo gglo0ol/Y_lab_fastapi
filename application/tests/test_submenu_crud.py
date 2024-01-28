@@ -1,5 +1,5 @@
-from tests.conftest import client
-from tests.test_menu_crud import (
+from .conftest import client
+from .test_menu_crud import (
     create_menu,
     delete_menu,
     check_empty_menu_list,

@@ -1,4 +1,4 @@
-from tests.conftest import client
+from .conftest import client
 
 
 def create_menu(title: str = "My menu 1", description: str = "My menu description 1"):

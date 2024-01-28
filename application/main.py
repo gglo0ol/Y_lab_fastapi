@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
 
-from application.menus.views import router as menu_router
-from application.submenus.views import router as submenu_router
-from application.dishes.views import router as dishes_router
-from application.core.db import Base, engine
+from menus.views import router as menu_router
+from submenus.views import router as submenu_router
+from dishes.views import router as dishes_router
+from core.db import Base, engine
 
 
 app = FastAPI()

@@ -4,15 +4,15 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, APIRouter
 
 
-from application.dishes.crud import (
+from dishes.crud import (
     get_dish_data,
     get_all_dishes_data,
     create_dish,
     update_dish_data,
     delete_dish_data,
 )
-from application.dishes.schemas import DishCreate, DishResponse
-from application.core.db import get_db
+from dishes.schemas import DishCreate, DishResponse
+from core.db import get_db
 
 router = APIRouter(
     tags=["Dishes"], prefix="/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes"

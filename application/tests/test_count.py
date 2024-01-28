@@ -1,16 +1,16 @@
-from tests.test_menu_crud import (
+from .test_menu_crud import (
     create_menu,
     delete_menu,
     check_empty_menu_list,
     check_menu,
 )
-from tests.test_submenu_crud import (
+from .test_submenu_crud import (
     create_submenu,
     delete_submenu,
     check_empty_submenu_list,
     check_submenu,
 )
-from tests.test_dishes_crud import (
+from .test_dishes_crud import (
     create_dish,
     check_dish_empty_list,
 )

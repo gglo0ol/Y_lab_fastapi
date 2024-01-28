@@ -3,15 +3,15 @@ from sqlalchemy.orm import Session
 from fastapi import Depends, APIRouter
 
 
-from application.submenus.crud import (
+from submenus.crud import (
     get_submenu_data,
     get_all_submenu_data,
     update_submenu_data,
     create_submenu,
     delete_submenu_data,
 )
-from application.submenus.schemas import SubmenuResponse, SubmenuCreate
-from application.core.db import get_db
+from submenus.schemas import SubmenuResponse, SubmenuCreate
+from core.db import get_db
 
 
 router = APIRouter(tags=["Submenus"], prefix="/api/v1/menus/{menu_id}/submenus")

@@ -4,15 +4,15 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 
 
-from application.menus.schemas import MenuResponse, MenuCreate
-from application.menus.crud import (
+from menus.schemas import MenuResponse, MenuCreate
+from menus.crud import (
     create_menu,
     get_all_menus,
     get_menu_data,
     update_menu_data,
     delete_menu_data,
 )
-from application.core.db import get_db
+from core.db import get_db
 
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
 

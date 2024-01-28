@@ -1,10 +1,10 @@
-from tests.conftest import client
-from tests.test_menu_crud import (
+from .conftest import client
+from .test_menu_crud import (
     create_menu,
     delete_menu,
     check_empty_menu_list,
 )
-from tests.test_submenu_crud import (
+from .test_submenu_crud import (
     create_submenu,
     delete_submenu,
     check_empty_submenu_list,

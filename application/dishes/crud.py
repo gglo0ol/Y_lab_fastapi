@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 
-from application.core.models.base import Dish
+from core.models.base import Dish
 
 
 def create_dish(

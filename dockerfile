@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-WORKDIR /app
+WORKDIR /app/application
 
 COPY ./requirements.txt /app/requirements.txt
 
@@ -10,6 +10,10 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY ./application /app/application
 
-COPY ./tests /app/tests
+COPY ./application/tests /app/application/tests
+
+COPY ./application/pytest.ini /app/application/pytest.ini
+
+
 
 CMD ["python", "main.py"]
