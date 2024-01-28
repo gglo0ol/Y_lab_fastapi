@@ -1,7 +1,7 @@
 from tests.conftest import client
 
 
-def create_menu(title: str, description: str):
+def create_menu(title: str = "My menu 1", description: str = "My menu description 1"):
     response = client.post(
         "/api/v1/menus/",
         json={"title": title, "description": description},
@@ -19,7 +19,11 @@ def get_all_menus():
     return response
 
 
-def update_menu(menu_id: str, new_title: str, new_description: str):
+def update_menu(
+    menu_id: str,
+    new_title: str,
+    new_description: str,
+):
     response = client.patch(
         f"/api/v1/menus/{menu_id}",
         json={
@@ -35,16 +39,26 @@ def delete_menu(menu_id: str):
     return response
 
 
+def check_empty_menu_list():
+    response = get_all_menus()
+    assert response.status_code == 200, response.text
+    assert response.json() == []
+
+
+def check_not_empty_menu_list():
+    response = get_all_menus()
+    assert response.status_code == 200, response.text
+    assert response.json() != []
+
+
 def test_menu():
     """Test all menu function"""
 
     # get empty list
-    get_empty_list = get_all_menus()
-    assert get_empty_list.status_code == 200, get_empty_list.text
-    assert get_empty_list.json() == []
+    check_empty_menu_list()
 
     # create a new menu
-    add_menu = create_menu(title="My menu 1", description="My menu description 1")
+    add_menu = create_menu()
     assert add_menu.status_code == 201, add_menu.text
     data = add_menu.json()
     assert all(
@@ -53,9 +67,7 @@ def test_menu():
     menu_id = data["id"]
 
     # Test list menu
-    all_menu_response = get_all_menus()
-    assert all_menu_response.status_code == 200, all_menu_response.text
-    assert all_menu_response.json() != []
+    check_not_empty_menu_list()
 
     # Test menu
     get_menu_response = check_menu(menu_id=menu_id)
@@ -99,9 +111,7 @@ def test_menu():
     }
 
     # Test all menu empty list
-    empty_list = get_all_menus()
-    assert empty_list.status_code == 200, get_empty_list.text
-    assert empty_list.json() == []
+    check_empty_menu_list()
 
     # Test menu
     get_menu_response = check_menu(menu_id=menu_id)

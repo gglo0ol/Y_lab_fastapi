@@ -1,5 +1,9 @@
 from tests.conftest import client
-from tests.test_menu_crud import create_menu, delete_menu, get_all_menus
+from tests.test_menu_crud import (
+    create_menu,
+    delete_menu,
+    check_empty_menu_list,
+)
 
 
 def create_submenu(menu_id: str, title: str, description: str):
@@ -36,6 +40,18 @@ def delete_submenu(menu_id: str, submenu_id: str):
     return response
 
 
+def check_empty_submenu_list(menu_id: str):
+    response = check_all_submenu(menu_id=menu_id)
+    assert response.status_code == 200, response.text
+    assert response.json() == []
+
+
+def check_not_empty_submenu_list(menu_id: str):
+    response = check_all_submenu(menu_id=menu_id)
+    assert response.status_code == 200, response.text
+    assert response.json() != []
+
+
 def test_submenu():
     # create menu
     create_menu_response = create_menu(
@@ -47,9 +63,7 @@ def test_submenu():
     menu_id = menu_data["id"]
 
     # Check list submenu (empty list)
-    all_submenu_response = check_all_submenu(menu_id=menu_id)
-    assert all_submenu_response.status_code == 200, all_submenu_response.text
-    assert all_submenu_response.json() == []
+    check_empty_submenu_list(menu_id=menu_id)
 
     # Create submenu
     submenu_title, submenu_description = "My submenu 1", "My submenu description 1"
@@ -63,9 +77,7 @@ def test_submenu():
     submenu_id = sub_data["id"]
 
     # Test not empty list
-    check_submenu_response = check_all_submenu(menu_id=menu_id)
-    assert check_submenu_response.status_code == 200, check_submenu_response.text
-    assert check_submenu_response.json() != []
+    check_not_empty_submenu_list(menu_id=menu_id)
 
     # Check submenu
     get_submenu_response = check_submenu(menu_id=menu_id, submenu_id=submenu_id)
@@ -107,9 +119,7 @@ def test_submenu():
     assert delete_submenu_response.status_code == 200, delete_submenu_response.text
 
     # Check submenu list (is empty)
-    check = check_all_submenu(menu_id=menu_id)
-    assert check.status_code == 200, check.text
-    assert check.json() == []
+    check_empty_submenu_list(menu_id=menu_id)
 
     # Check submenu
     sub = check_submenu(menu_id=menu_id, submenu_id=submenu_id)
@@ -121,6 +131,4 @@ def test_submenu():
     assert menu_delete.status_code == 200, menu_delete.text
 
     # Check menu list (is empty)
-    menu_check = get_all_menus()
-    assert menu_check.status_code == 200, menu_check.text
-    assert menu_check.json() == []
+    check_empty_menu_list()
