@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 
 from core.models.base import Menu, Submenu, Dish
@@ -7,18 +8,36 @@ from core.models.base import Menu, Submenu, Dish
 
 def get_menu_data(db: Session, menu_id: str):
     db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
+    count_submenu_and_dishes = (
+        db.query(
+            Menu.id.label("menu_id"),
+            func.count(func.distinct(Submenu.id)).label("sub_id"),
+            func.count(func.distinct(Dish.id)).label("dish_id"),
+        )
+        .filter(Menu.id == menu_id)
+        .join(Submenu, Menu.submenus)
+        .outerjoin(Dish, Submenu.dishes)
+        .group_by(Menu.id, Submenu.id)
+        .subquery()
+    )
+
+    result = (
+        db.query(
+            func.sum(count_submenu_and_dishes.c.sub_id).label("submenus"),
+            func.sum(count_submenu_and_dishes.c.dish_id).label("dishes"),
+        )
+        .group_by(count_submenu_and_dishes.c.menu_id)
+        .first()
+    )
+    submenu_count, dishes_count = result or (0, 0)
+
     if db_menu:
         return {
             "id": db_menu.id,
             "title": db_menu.title,
             "description": db_menu.description,
-            "submenus_count": db.query(Submenu, Menu)
-            .join(Submenu, Submenu.menu_id == db_menu.id)
-            .count(),
-            "dishes_count": db.query(Submenu, Menu)
-            .join(Submenu, Submenu.menu_id == db_menu.id)
-            .join(Dish, Dish.submenu_id == Submenu.id)
-            .count(),
+            "submenus_count": submenu_count,
+            "dishes_count": dishes_count,
         }
     else:
         raise HTTPException(status_code=404, detail="menu not found")

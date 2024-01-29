@@ -13,7 +13,8 @@ def get_submenu_data(db: Session, submenu_id: str, menu_id: str):
             "menu_id": menu_id,
             "title": db_submenu.title,
             "description": db_submenu.description,
-            "dishes_count": db.query(Submenu, Dish)
+            "dishes_count": db.query(Submenu)
+            .filter(Submenu.id == submenu_id)
             .join(Dish, db_submenu.id == Dish.submenu_id)
             .count(),
         }
