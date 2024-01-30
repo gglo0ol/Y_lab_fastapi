@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
-from .test_1_menu_crud import create_menu, delete_menu, get_menu
-from .test_3_dishes_crud import create_dish, delete_dish, get_all_dish
+from .test_1_menu_crud import create_menu, delete_menu, get_menu, get_all_menus
+from .test_3_dishes_crud import create_dish, get_all_dish
 from .test_2_submenu_crud import (
     create_submenu,
     delete_submenu,
@@ -80,7 +80,6 @@ def test_count(client: TestClient):
         client=client, menu_id=menu_id, submenu_id=submenu_id
     )
     assert delete_submenu_response.status_code == 200, delete_submenu_response.text
-    print(delete_submenu_response.json())
 
     # Check menu
     check_deleted_submenu_response = get_all_submenu(client=client, menu_id=menu_id)
@@ -95,6 +94,25 @@ def test_count(client: TestClient):
     )
     assert submenu_response.status_code == 200, submenu_response.text
     assert submenu_response.json() == []
+
+    # Check menu
+    check_menu_1_response = get_menu(client=client, menu_id=menu_id)
+    assert check_menu_1_response.status_code == 200, check_menu_1_response.text
+    check_1_menu_data = check_menu_1_response.json()
+    assert all(
+        map(lambda item: item in check_1_menu_data, ("id", "title", "description"))
+    )
+    assert check_1_menu_data["dishes_count"] == 0
+    assert check_1_menu_data["submenus_count"] == 0
+
+    # Delete menu
+    delete_menu_1_response = delete_menu(client=client, menu_id=menu_id)
+    assert delete_menu_1_response.status_code == 200, delete_menu_1_response.text
+
+    # Check list of menu
+    check_list_menu = get_all_menus(client=client)
+    assert check_list_menu.status_code == 200, check_list_menu.text
+    assert check_list_menu.json() == []
 
 
 #

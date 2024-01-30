@@ -40,11 +40,10 @@ def client_fixture(session: Session):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True, scope="function")
 def setup_bd():
     Base.metadata.create_all(bind=engine)
     try:
         yield
     finally:
         Base.metadata.drop_all(bind=engine)
-        Base.metadata.create_all(bind=engine)
