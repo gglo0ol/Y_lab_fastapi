@@ -2,18 +2,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from fastapi.testclient import TestClient
 
-from core.config import (
-    POSTGRES_USER,
-    POSTGRES_DB,
-    POSTGRES_PASSWORD,
-)
+from core.config import POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, DB_HOST
 from core.db import Base, get_db, engine
 from core.models.base import Menu, Submenu, Dish
 from main import app
 import pytest
 
 
-DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}"  # localhost:5555
+DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # localhost:5555
 
 
 @pytest.fixture(name="session", scope="function")

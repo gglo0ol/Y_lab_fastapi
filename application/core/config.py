@@ -12,7 +12,7 @@ DB_HOST = os.getenv("DB_HOST")
 
 
 class Settings(BaseSettings):
-    connection_db: str = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}"  # localhost:5432
+    connection_db: str = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # localhost:5432
 
 
 settings = Settings()
