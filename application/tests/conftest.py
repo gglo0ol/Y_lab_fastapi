@@ -1,33 +1,50 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from fastapi.testclient import TestClient
 
 from core.config import (
     POSTGRES_USER,
     POSTGRES_DB,
     POSTGRES_PASSWORD,
-    DB_HOST,
 )
-from core.db import Base, get_db
+from core.db import Base, get_db, engine
+from core.models.base import Menu, Submenu, Dish
 from main import app
+import pytest
 
 
-DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}/{POSTGRES_DB}"  # localhost:5555
-
-test_engine = create_engine(url=DATABASE_URL_TEST)
-Test_session = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
-
-Base.metadata.create_all(bind=test_engine)
+DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}"  # localhost:5555
 
 
-def test_get_db():
-    test_db = Test_session()
+@pytest.fixture(name="session", scope="function")
+def session_fixture():
+    test_engine = create_engine(url=DATABASE_URL_TEST)
+    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
+    session = TestSession()
     try:
-        yield test_db
+        yield session
     finally:
-        test_db.close()
+        session.close()
 
 
-app.dependency_overrides[get_db] = test_get_db
+@pytest.fixture(name="client", scope="function")
+def client_fixture(session: Session):
+    def get_session_override():
+        return session
 
-client = TestClient(app)
+    app.dependency_overrides[get_db] = get_session_override
+    client = TestClient(app)
+
+    yield client
+
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture(autouse=True, scope="session")
+def setup_bd():
+    Base.metadata.create_all(bind=engine)
+    try:
+        yield
+    finally:
+        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)

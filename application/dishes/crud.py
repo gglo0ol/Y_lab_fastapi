@@ -74,4 +74,4 @@ def delete_dish_data(dish_id: str, db: Session):
         db.commit()
         return {"status": "true", "message": "The dish has been deleted"}
     else:
-        return {"details": "dish not found"}
+        return {"detail": "dish not found"}
