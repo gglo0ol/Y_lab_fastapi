@@ -30,9 +30,9 @@ class Submenu(Base):
 class Dish(Base):
     __tablename__ = "dishes"
     id = Column(String, primary_key=True, default=get_uuid, unique=True)
+    submenu_id = Column(String, ForeignKey("submenus.id"))
     title = Column(String)
     description = Column(String)
     price = Column(String)
-    submenu_id = Column(String, ForeignKey("submenus.id"))
 
     submenu = relationship("Submenu", back_populates="dishes")

@@ -9,6 +9,7 @@ class DishCreate(BaseModel):
 
 class DishResponse(BaseModel):
     id: str
+    submenu_id: str
     title: str
     description: str
     price: str

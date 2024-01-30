@@ -25,9 +25,9 @@ def create_dish_endpoint(
 ):
     return create_dish(
         submenu_id=submenu_id,
-        dish_title=data_in.title,
-        dish_description=data_in.description,
-        dish_price=data_in.price,
+        title=data_in.title,
+        description=data_in.description,
+        price=data_in.price,
         db=db,
     )
 
@@ -48,10 +48,10 @@ def update_dish(
     db: Session = Depends(get_db),
 ):
     return update_dish_data(
-        dish_id=dish_id,
-        new_dish_title=data_in.title,
-        new_dish_description=data_in.description,
-        new_dish_price=data_in.price,
+        id=dish_id,
+        title=data_in.title,
+        description=data_in.description,
+        price=data_in.price,
         db=db,
     )
 

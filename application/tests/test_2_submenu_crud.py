@@ -16,7 +16,7 @@ def create_submenu(
     return response
 
 
-def get_submenu(client: TestClient, menu_id: str, submenu_id):
+def get_submenu(client: TestClient, menu_id: str, submenu_id: str):
     response = client.get(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}")
     return response
 

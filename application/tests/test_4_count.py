@@ -1,28 +1,102 @@
-# from .test_menu_crud import (
-#     create_menu,
-#     delete_menu,
-#     check_empty_menu_list,
-#     check_menu,
-# )
-# from .test_submenu_crud import (
-#     create_submenu,
-#     delete_submenu,
-#     check_empty_submenu_list,
-#     check_submenu,
-# )
-# from .test_dishes_crud import (
-#     create_dish,
-#     check_dish_empty_list,
-# )
-#
-#
-# def test_count():
-#     # Create menu
-#     create_menu_response = create_menu()
-#     assert create_menu_response.status_code == 201, create_menu_response.text
-#     menu_data = create_menu_response.json()
-#     assert "id" in menu_data
-#     menu_id = menu_data["id"]
+from fastapi.testclient import TestClient
+
+from .test_1_menu_crud import create_menu, delete_menu, get_menu
+from .test_3_dishes_crud import create_dish, delete_dish, get_all_dish
+from .test_2_submenu_crud import (
+    create_submenu,
+    delete_submenu,
+    get_submenu,
+    get_all_submenu,
+)
+
+
+def test_count(client: TestClient):
+    # Create menu
+    create_menu_response = create_menu(client=client)
+    assert create_menu_response.status_code == 201, create_menu_response.text
+    menu_data = create_menu_response.json()
+    assert all(map(lambda item: item in menu_data, ("id", "title", "description")))
+    menu_id = menu_data["id"]
+
+    # Create submenu
+    create_submenu_response = create_submenu(client=client, menu_id=menu_id)
+    assert create_submenu_response.status_code == 201, create_submenu_response.text
+    submenu_data = create_submenu_response.json()
+    assert all(map(lambda item: item in submenu_data, ("id", "title", "description")))
+    submenu_id = submenu_data["id"]
+
+    # Create dish_1
+    create_dish_1_response = create_dish(
+        client=client,
+        menu_id=menu_id,
+        submenu_id=submenu_id,
+        title="My dish 2",
+        description="My dish description 2",
+        price="13.50",
+    )
+    assert create_dish_1_response.status_code == 201, create_dish_1_response.text
+    dish_1_data = create_dish_1_response.json()
+    assert all(
+        map(lambda item: item in dish_1_data, ("id", "title", "description", "price"))
+    )
+    dish_1_id = dish_1_data["id"]
+
+    # Create dish_2
+    create_dish_2_response = create_dish(
+        client=client, menu_id=menu_id, submenu_id=submenu_id
+    )
+    assert create_dish_2_response.status_code == 201, create_dish_2_response.text
+    dish_2_data = create_dish_2_response.json()
+    assert all(
+        map(lambda item: item in dish_2_data, ("id", "title", "description", "price"))
+    )
+    dish_2_id = dish_2_data["id"]
+
+    # Check menu
+    check_menu_response = get_menu(client=client, menu_id=menu_id)
+    assert check_menu_response.status_code == 200, check_menu_response.text
+    check_menu_data = check_menu_response.json()
+    assert all(
+        map(lambda item: item in check_menu_data, ("id", "title", "description"))
+    )
+    assert check_menu_data["id"] == menu_id
+    assert check_menu_data["dishes_count"] == 2
+    assert check_menu_data["submenus_count"] == 1
+
+    # Check submenu
+    check_submenu_response = get_submenu(
+        client=client, menu_id=menu_id, submenu_id=submenu_id
+    )
+    assert check_submenu_response.status_code == 200, check_submenu_response.text
+    check_submenu_data = check_submenu_response.json()
+    assert all(
+        map(lambda item: item in check_submenu_data, ("id", "title", "description"))
+    )
+    assert check_submenu_data["id"] == submenu_id
+    assert check_submenu_data["dishes_count"] == 2
+
+    # Delete submenu
+    delete_submenu_response = delete_submenu(
+        client=client, menu_id=menu_id, submenu_id=submenu_id
+    )
+    assert delete_submenu_response.status_code == 200, delete_submenu_response.text
+    print(delete_submenu_response.json())
+
+    # Check menu
+    check_deleted_submenu_response = get_all_submenu(client=client, menu_id=menu_id)
+    assert (
+        check_deleted_submenu_response.status_code == 200
+    ), check_deleted_submenu_response.text
+    assert check_deleted_submenu_response.json() == []
+
+    # Check submenu
+    submenu_response = get_all_dish(
+        client=client, menu_id=menu_id, submenu_id=submenu_id
+    )
+    assert submenu_response.status_code == 200, submenu_response.text
+    assert submenu_response.json() == []
+
+
 #
 #     # Create submenu
 #     create_submenu_response = create_submenu(

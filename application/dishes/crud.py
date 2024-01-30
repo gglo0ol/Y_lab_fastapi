@@ -7,16 +7,16 @@ from core.models.base import Dish
 
 def create_dish(
     submenu_id: str,
-    dish_title: str,
-    dish_description: str,
-    dish_price: str,
+    title: str,
+    description: str,
+    price: str,
     db: Session,
 ):
     db_dish = Dish(
         submenu_id=submenu_id,
-        title=dish_title,
-        description=dish_description,
-        price=dish_price,
+        title=title,
+        description=description,
+        price=price,
     )
     db.add(db_dish)
     db.commit()
@@ -24,11 +24,15 @@ def create_dish(
     return get_dish_data(submenu_id=submenu_id, dish_id=db_dish.id, db=db)
 
 
-def get_dish_data(db: Session, dish_id: str, submenu_id: str):
-    db_dish = db.query(Dish).filter(Dish.submenu_id == submenu_id).first()
+def get_dish_data(db: Session, submenu_id: str, dish_id: str):
+    db_dish = (
+        db.query(Dish).filter(Dish.submenu_id == submenu_id, Dish.id == dish_id).first()
+    )
+
     if db_dish:
         return {
             "id": db_dish.id,
+            "submenu_id": db_dish.submenu_id,
             "title": db_dish.title,
             "description": db_dish.description,
             "price": db_dish.price,
@@ -46,18 +50,18 @@ def get_all_dishes_data(db: Session, submenu_id: str):
 
 
 def update_dish_data(
-    dish_id: str,
-    new_dish_title: str,
-    new_dish_description: str,
-    new_dish_price: float,
+    id: str,
+    title: str,
+    description: str,
+    price: float,
     db: Session,
 ):
-    db_dish = db.query(Dish).filter(Dish.id == dish_id).first()
+    db_dish = db.query(Dish).filter(Dish.id == id).first()
     if db_dish:
         db_dish.title, db_dish.description, db_dish.price = (
-            new_dish_title,
-            new_dish_description,
-            new_dish_price,
+            title,
+            description,
+            price,
         )
         db.add(db_dish)
         db.commit()
