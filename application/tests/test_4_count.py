@@ -1,48 +1,71 @@
 from fastapi.testclient import TestClient
 
-from .test_1_menu_crud import create_menu, delete_menu, get_menu, get_all_menus
-from .test_3_dishes_crud import create_dish, get_all_dish
+from .test_1_menu_crud import (
+    delete_menu,
+    get_menu,
+    get_all_menus,
+    json_create_menu,
+    create_menu_by_id,
+)
+from .test_3_dishes_crud import (
+    get_all_dish,
+    json_dishes_create,
+    create_dish_by_id,
+)
 from .test_2_submenu_crud import (
-    create_submenu,
     delete_submenu,
     get_submenu,
     get_all_submenu,
+    json_submenu_create,
+    create_submenu_by_id,
 )
 
 
-def test_count(client: TestClient):
+def test_count(client: TestClient, get_all_menus):
     # Create menu
-    create_menu_response = create_menu(client=client)
+    create_menu_response = create_menu_by_id(client=client)
     assert create_menu_response.status_code == 201, create_menu_response.text
     menu_data = create_menu_response.json()
     assert all(map(lambda item: item in menu_data, ("id", "title", "description")))
+    assert menu_data["title"] == json_create_menu["title"]
+    assert menu_data["description"] == json_create_menu["description"]
     menu_id = menu_data["id"]
 
     # Create submenu
-    create_submenu_response = create_submenu(client=client, menu_id=menu_id)
+    create_submenu_response = create_submenu_by_id(client=client, menu_id=menu_id)
     assert create_submenu_response.status_code == 201, create_submenu_response.text
     submenu_data = create_submenu_response.json()
     assert all(map(lambda item: item in submenu_data, ("id", "title", "description")))
+    assert submenu_data["title"] == json_submenu_create["title"]
+    assert submenu_data["description"] == json_submenu_create["description"]
     submenu_id = submenu_data["id"]
 
     # Create dish_1
-    create_dish_1_response = create_dish(
+    json_dish_1 = {
+        "title": "My dish 2",
+        "description": "My dish description 2",
+        "price": "13.50",
+    }
+    create_dish_1_response = create_dish_by_id(
         client=client,
         menu_id=menu_id,
         submenu_id=submenu_id,
-        title="My dish 2",
-        description="My dish description 2",
-        price="13.50",
+        title=json_dish_1["title"],
+        description=json_dish_1["description"],
+        price=json_dish_1["price"],
     )
     assert create_dish_1_response.status_code == 201, create_dish_1_response.text
     dish_1_data = create_dish_1_response.json()
     assert all(
         map(lambda item: item in dish_1_data, ("id", "title", "description", "price"))
     )
+    assert dish_1_data["title"] == json_dish_1["title"]
+    assert dish_1_data["description"] == json_dish_1["description"]
+    assert dish_1_data["price"] == json_dish_1["price"]
     dish_1_id = dish_1_data["id"]
 
     # Create dish_2
-    create_dish_2_response = create_dish(
+    create_dish_2_response = create_dish_by_id(
         client=client, menu_id=menu_id, submenu_id=submenu_id
     )
     assert create_dish_2_response.status_code == 201, create_dish_2_response.text
@@ -50,6 +73,9 @@ def test_count(client: TestClient):
     assert all(
         map(lambda item: item in dish_2_data, ("id", "title", "description", "price"))
     )
+    assert dish_2_data["title"] == json_dishes_create["title"]
+    assert dish_2_data["description"] == json_dishes_create["description"]
+    assert dish_2_data["price"] == json_dishes_create["price"]
     dish_2_id = dish_2_data["id"]
 
     # Check menu
@@ -110,90 +136,6 @@ def test_count(client: TestClient):
     assert delete_menu_1_response.status_code == 200, delete_menu_1_response.text
 
     # Check list of menu
-    check_list_menu = get_all_menus(client=client)
+    check_list_menu = get_all_menus
     assert check_list_menu.status_code == 200, check_list_menu.text
     assert check_list_menu.json() == []
-
-
-#
-#     # Create submenu
-#     create_submenu_response = create_submenu(
-#         menu_id=menu_id, title="My submenu 1", description="My submenu description 1"
-#     )
-#     assert create_submenu_response.status_code == 201, create_submenu_response.text
-#     submenu_data = create_submenu_response.json()
-#     assert "id" in submenu_data
-#     submenu_id = submenu_data["id"]
-#
-#     # Create dish 1
-#     create_dish_1_response = create_dish(
-#         menu_id=menu_id,
-#         submenu_id=submenu_id,
-#         title="My dish 2",
-#         description="My dish description 2",
-#         price="13.50",
-#     )
-#     assert create_dish_1_response.status_code == 201, create_dish_1_response.text
-#     dish_1_data = create_dish_1_response.json()
-#     assert "id" in dish_1_data
-#     dish_id_1 = dish_1_data["id"]
-#
-#     # Create dish 2
-#     create_dish_2_response = create_dish(
-#         menu_id=menu_id,
-#         submenu_id=submenu_id,
-#         title="My dish 1",
-#         description="My dish description 1",
-#         price="12.50",
-#     )
-#     assert create_dish_2_response.status_code == 201, create_dish_2_response.text
-#     dish_2_data = create_dish_2_response.json()
-#     assert "id" in dish_2_data
-#     dish_id_2 = dish_2_data["id"]
-#
-#     # Check menu
-#     check_menu_response = check_menu(menu_id=menu_id)
-#     assert check_menu_response.status_code == 200, check_menu_response.text
-#     checking_menu_data = check_menu_response.json()
-#     assert "id" in checking_menu_data
-#     assert checking_menu_data["id"] == menu_id
-#     assert (
-#         checking_menu_data["submenus_count"] == 1
-#         and checking_menu_data["dishes_count"] == 2
-#     )
-#
-#     # Check submenu
-#     checking_submenu_response = check_submenu(menu_id=menu_id, submenu_id=submenu_id)
-#     assert checking_submenu_response.status_code == 200, create_submenu_response.text
-#     checking_submenu_data = checking_submenu_response.json()
-#     assert "id" in checking_submenu_data
-#     assert checking_submenu_data["id"] == submenu_id
-#     assert checking_submenu_data["dishes_count"] == 2
-#
-#     # Delete submenu
-#     delete_submenu_response = delete_submenu(menu_id=menu_id, submenu_id=submenu_id)
-#     assert delete_submenu_response.status_code == 200, delete_submenu_response.text
-#
-#     # Check empty submenu list
-#     check_empty_submenu_list(menu_id=menu_id)
-#
-#     # Check empty dishes list
-#     check_dish_empty_list(menu_id=menu_id, submenu_id=submenu_id)
-#
-#     # Check menu
-#     new_check_menu_response = check_menu(menu_id=menu_id)
-#     assert new_check_menu_response.status_code == 200, new_check_menu_response.text
-#     checking_new_menu_data = new_check_menu_response.json()
-#     assert "id" in checking_new_menu_data
-#     assert checking_new_menu_data["id"] == menu_id
-#     assert (
-#         checking_new_menu_data["submenus_count"] == 0
-#         and checking_new_menu_data["dishes_count"] == 0
-#     )
-#
-#     # delete menu
-#     delete_menu_response = delete_menu(menu_id=menu_id)
-#     assert delete_menu_response.status_code == 200, delete_menu_response.text
-#
-#     # Check empty menu list
-#     check_empty_menu_list()
