@@ -8,6 +8,25 @@ from core.models.base import Menu, Submenu, Dish
 
 def get_menu_data(db: Session, menu_id: str):
     db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
+    result = get_submenu_and_dishes_count(db=db, menu_id=menu_id)
+    submenu_count, dishes_count = (result["submenu_count"], result["dishes_count"]) or (
+        0,
+        0,
+    )
+
+    if db_menu:
+        return {
+            "id": db_menu.id,
+            "title": db_menu.title,
+            "description": db_menu.description,
+            "submenus_count": submenu_count,
+            "dishes_count": dishes_count,
+        }
+    else:
+        raise HTTPException(status_code=404, detail="menu not found")
+
+
+def get_submenu_and_dishes_count(db: Session, menu_id: str):
     count_submenu_and_dishes = (
         db.query(
             Menu.id.label("menu_id"),
@@ -30,17 +49,11 @@ def get_menu_data(db: Session, menu_id: str):
         .first()
     )
     submenu_count, dishes_count = result or (0, 0)
-
-    if db_menu:
-        return {
-            "id": db_menu.id,
-            "title": db_menu.title,
-            "description": db_menu.description,
-            "submenus_count": submenu_count,
-            "dishes_count": dishes_count,
-        }
-    else:
-        raise HTTPException(status_code=404, detail="menu not found")
+    return {
+        "menu_id": menu_id,
+        "submenu_count": submenu_count,
+        "dishes_count": dishes_count,
+    }
 
 
 def get_all_menus(db: Session):

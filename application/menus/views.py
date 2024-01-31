@@ -11,6 +11,7 @@ from menus.crud import (
     get_menu_data,
     update_menu_data,
     delete_menu_data,
+    get_submenu_and_dishes_count,
 )
 from core.db import get_db
 
@@ -30,6 +31,11 @@ def get_all_menus_endpoint(db: Session = Depends(get_db)):
 @router.get("/{menu_id}/", response_model=MenuResponse)
 def get_menu(menu_id: str, db: Session = Depends(get_db)):
     return get_menu_data(db, menu_id=menu_id)
+
+
+@router.get("/counts/{menu_id}/")
+def get_menu_submenus_and_dishes_count(menu_id: str, db: Session = Depends(get_db)):
+    return get_submenu_and_dishes_count(db, menu_id=menu_id)
 
 
 @router.patch("/{menu_id}/", response_model=MenuResponse)
