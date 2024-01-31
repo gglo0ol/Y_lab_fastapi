@@ -112,8 +112,6 @@ _**CRUD – create/update/retrieve/delete._
 ### Пункт 3 задания ( Реализовать вывод количества подменю и блюд для Меню через один (сложный) ORM запрос) выполнен в логике модуля menus/crud, а именно в функции get_submenu_and_dishes_count.
 #### Так же добавлен "хендлер" для отображения данных для конкретного меню.
 
-<details>
-    ![img_3.png](img_3.png)
-</details>
-   
+![img_3.png](img_3.png)
+
 </details>
