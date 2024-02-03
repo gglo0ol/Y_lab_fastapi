@@ -57,4 +57,3 @@ services:
 networks:
   ylab_network:
     name: ylab_network
-

@@ -42,7 +42,7 @@
 `python3 main.py`
 
 Ждем когда программа запустится и можем тестить.
-  
+
 </details>
 
 
@@ -60,7 +60,7 @@
 Образы для Docker:
 
     (API) python:3.10-slim
-    
+
     (DB) postgres:15.1-alpine
 
 1. Написать CRUD тесты для ранее разработанного API с помощью библиотеки pytest
@@ -89,17 +89,17 @@ _**CRUD – create/update/retrieve/delete._
 `git clone https://github.com/gglo0ol/Y_lab_fastapi`
 
 * Заходим в папку с проектом.
-* \* Для запуска тестов вводим в терминале команду 
+* \* Для запуска тестов вводим в терминале команду
 
 `docker compose -f docker-compose-test.yml up -d && docker logs --follow backend && docker compose -f docker-compose-test.yml down -v`
 
-при этом поднимается тестовая БД и логи тестов у нас будут отображаться в терминале  
+при этом поднимается тестовая БД и логи тестов у нас будут отображаться в терминале
 
 * Чтобы запустить само приложение с БД
 
 `docker compose up -d`
 
-* Прложение будет доступно по ссылке 
+* Прложение будет доступно по ссылке
 
 `http://0.0.0.0:8000/docs`
 

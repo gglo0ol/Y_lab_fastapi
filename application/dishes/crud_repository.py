@@ -1,10 +1,8 @@
-from sqlalchemy.orm import Session
-from fastapi import HTTPException, Depends
-
-
 from core.db import get_db
 from core.models.base import Dish
 from dishes.schemas import DishCreate, DishResponse
+from fastapi import Depends, HTTPException
+from sqlalchemy.orm import Session
 
 
 class DishesRepository:
@@ -15,7 +13,7 @@ class DishesRepository:
         self,
         submenu_id: str,
         data: DishCreate,
-    ):
+    ) -> DishResponse:
         db_dish = Dish(
             submenu_id=submenu_id,
             title=data.title,
@@ -27,7 +25,7 @@ class DishesRepository:
         self.db.refresh(db_dish)
         return self.get_dish_data(submenu_id=submenu_id, dish_id=db_dish.id)
 
-    def get_dish_data(self, submenu_id: str, dish_id: str):
+    def get_dish_data(self, submenu_id: str, dish_id: str) -> DishResponse:
         db_dish = (
             self.db.query(Dish)
             .filter(Dish.submenu_id == submenu_id, Dish.id == dish_id)
@@ -36,17 +34,17 @@ class DishesRepository:
 
         if db_dish:
             item = {
-                "id": db_dish.id,
-                "submenu_id": db_dish.submenu_id,
-                "title": db_dish.title,
-                "description": db_dish.description,
-                "price": db_dish.price,
+                'id': db_dish.id,
+                'submenu_id': db_dish.submenu_id,
+                'title': db_dish.title,
+                'description': db_dish.description,
+                'price': db_dish.price,
             }
             return DishResponse(**item)
         else:
-            raise HTTPException(status_code=404, detail="dish not found")
+            raise HTTPException(status_code=404, detail='dish not found')
 
-    def get_all_dishes_data(self, submenu_id: str):
+    def get_all_dishes_data(self, submenu_id: str) -> list[DishResponse]:
         db_dish = self.db.query(Dish).filter(Dish.submenu_id == submenu_id).all()
         return [
             self.get_dish_data(dish_id=dish.id, submenu_id=dish.submenu_id)
@@ -57,7 +55,7 @@ class DishesRepository:
         self,
         dish_id: str,
         data: DishCreate,
-    ):
+    ) -> DishResponse | dict:
         db_dish = self.db.query(Dish).filter(Dish.id == dish_id).first()
         if db_dish:
             db_dish.title, db_dish.description, db_dish.price = (
@@ -70,13 +68,13 @@ class DishesRepository:
             self.db.refresh(db_dish)
             return self.get_dish_data(submenu_id=db_dish.submenu_id, dish_id=db_dish.id)
         else:
-            return {"detail": "dish not found"}
+            return {'detail': 'dish not found'}
 
-    def delete_dish_data(self, dish_id: str):
+    def delete_dish_data(self, dish_id: str) -> dict:
         db_dish = self.db.query(Dish).filter(Dish.id == dish_id).first()
         if db_dish:
             self.db.delete(db_dish)
             self.db.commit()
-            return {"status": "true", "message": "The dish has been deleted"}
+            return {'status': 'true', 'message': 'The dish has been deleted'}
         else:
-            return {"detail": "dish not found"}
+            return {'detail': 'dish not found'}

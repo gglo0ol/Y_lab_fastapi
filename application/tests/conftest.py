@@ -1,18 +1,32 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from fastapi.testclient import TestClient
-
-from core.config import POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD, DB_HOST
-from core.db import Base, get_db, engine
-from core.models.base import Menu, Submenu, Dish
-from main import app
 import pytest
+from core.config import DB_HOST, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER
+from core.db import Base, engine, get_db
+from fastapi.testclient import TestClient
+from main import app
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
+# localhost:5555
+DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"
 
 
-DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # localhost:5555
+json_create_menu = {'title': 'My menu 1', 'description': 'My menu description 1'}
+json_update_menu = {
+    'title': 'My updated menu 1',
+    'description': 'My updated menu description 1',
+}
 
 
-@pytest.fixture(name="session", scope="function")
+@pytest.fixture(autouse=True, scope='function')
+def setup_bd():
+    Base.metadata.create_all(bind=engine)
+    try:
+        yield
+    finally:
+        Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture(name='session', scope='module')
 def session_fixture():
     test_engine = create_engine(url=DATABASE_URL_TEST)
     TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
@@ -23,7 +37,7 @@ def session_fixture():
         session.close()
 
 
-@pytest.fixture(name="client", scope="function")
+@pytest.fixture(name='client', scope='module')
 def client_fixture(session: Session):
     def get_session_override():
         return session
@@ -36,10 +50,15 @@ def client_fixture(session: Session):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture(autouse=True, scope="function")
-def setup_bd():
-    Base.metadata.create_all(bind=engine)
-    try:
-        yield
-    finally:
-        Base.metadata.drop_all(bind=engine)
+@pytest.fixture(scope='function')
+def create_menu(
+    client: TestClient,
+):
+    response = client.post('/api/v1/menus/', json=json_create_menu)
+    return response
+
+
+@pytest.fixture(scope='function')
+def get_all_menus(client: TestClient):
+    response = client.get('/api/v1/menus/')
+    return response
