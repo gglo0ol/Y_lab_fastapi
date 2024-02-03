@@ -1,53 +1,42 @@
 from typing import List
 
-from sqlalchemy.orm import Session
+
 from fastapi import APIRouter, Depends
 
 
 from menus.schemas import MenuResponse, MenuCreate
-from menus.crud import (
-    create_menu,
-    get_all_menus,
-    get_menu_data,
-    update_menu_data,
-    delete_menu_data,
-    get_submenu_and_dishes_count,
-)
-from core.db import get_db
+
+from menus.service_repository import MenuService
+
 
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
 
 
 @router.post("/", status_code=201, response_model=MenuResponse)
-def create_menu_endpoint(get_request: MenuCreate, db: Session = Depends(get_db)):
-    return create_menu(db, get_request.title, get_request.description)
+def create_menu_endpoint(data: MenuCreate, repo: MenuService = Depends()):
+    return repo.create_menu(data)
 
 
 @router.get("/", response_model=List[MenuResponse])
-def get_all_menus_endpoint(db: Session = Depends(get_db)):
-    return get_all_menus(db)
+def get_all_menus_endpoint(repo: MenuService = Depends()):
+    return repo.get_all_menus()
 
 
 @router.get("/{menu_id}/", response_model=MenuResponse)
-def get_menu(menu_id: str, db: Session = Depends(get_db)):
-    return get_menu_data(db, menu_id=menu_id)
+def get_menu(menu_id: str, repo: MenuService = Depends()):
+    return repo.get_menu_by_id(menu_id=menu_id)
 
 
 @router.get("/counts/{menu_id}/")
-def get_menu_submenus_and_dishes_count(menu_id: str, db: Session = Depends(get_db)):
-    return get_submenu_and_dishes_count(db, menu_id=menu_id)
+def get_menu_submenus_and_dishes_count(menu_id: str, repo: MenuService = Depends()):
+    return repo.get_menu_submenus_and_dishes_count(menu_id=menu_id)
 
 
 @router.patch("/{menu_id}/", response_model=MenuResponse)
-def update_menu(menu_id: str, get_update: MenuCreate, db: Session = Depends(get_db)):
-    return update_menu_data(
-        db,
-        menu_id=menu_id,
-        new_title=get_update.title,
-        new_description=get_update.description,
-    )
+def update_menu(menu_id: str, get_update: MenuCreate, repo: MenuService = Depends()):
+    return repo.update_menu(menu_id=menu_id, data=get_update)
 
 
 @router.delete("/{menu_id}/")
-def delete_menu(menu_id: str, db: Session = Depends(get_db)):
-    return delete_menu_data(db, menu_id=menu_id)
+def delete_menu(menu_id: str, repo: MenuService = Depends()):
+    return repo.delete_menu(menu_id=menu_id)

@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+from redis import ConnectionPool, Redis
 
-from core.config import settings
+from core.config import settings, REDIS_URL
 
 from uuid import uuid4
 
@@ -22,3 +23,14 @@ def get_db():
 
 def get_uuid():
     return str(uuid4())
+
+
+def create_redis():
+    return ConnectionPool.from_url(REDIS_URL)
+
+
+pool = create_redis()
+
+
+def get_redis():
+    return Redis(connection_pool=pool)

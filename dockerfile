@@ -14,6 +14,4 @@ COPY ./application/tests /app/application/tests
 
 COPY ./application/pytest.ini /app/application/pytest.ini
 
-
-
 CMD ["python", "main.py"]
