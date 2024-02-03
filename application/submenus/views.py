@@ -35,7 +35,7 @@ def update_submenu(
     submenu_id: str,
     data_in: SubmenuCreate,
     repo: SubmenuService = Depends(),
-) -> SubmenuResponse:
+) -> SubmenuResponse | dict:
     return repo.update_submenu_by_id(
         submenu_id=submenu_id, data=data_in, menu_id=menu_id
     )

@@ -32,7 +32,7 @@ def get_menu_submenus_and_dishes_count(
 @router.patch('/{menu_id}/', response_model=MenuResponse)
 def update_menu(
     menu_id: str, get_update: MenuCreate, repo: MenuService = Depends()
-) -> MenuResponse:
+) -> MenuResponse | dict:
     return repo.update_menu(menu_id=menu_id, data=get_update)
 
 

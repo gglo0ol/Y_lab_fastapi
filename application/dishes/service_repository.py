@@ -1,5 +1,3 @@
-import pickle
-
 from core.cache_repository import CacheRepository
 from dishes.crud_repository import DishesRepository
 from dishes.schemas import DishCreate, DishResponse
@@ -51,7 +49,7 @@ class DishesService:
 
     def update_dish(
         self, menu_id: str, submenu_id: str, dish_id: str, data: DishCreate
-    ) -> DishResponse:
+    ) -> DishResponse | dict:
         item = self.crud.update_dish_data(dish_id=dish_id, data=data)
         self.cacher.update_dish_by_id(
             menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, item=item

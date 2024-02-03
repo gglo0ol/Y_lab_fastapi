@@ -36,7 +36,7 @@ class SubmenuService:
 
     def update_submenu_by_id(
         self, menu_id: str, submenu_id: str, data: SubmenuCreate
-    ) -> SubmenuResponse:
+    ) -> SubmenuResponse | dict:
         self.cache.delete_submenu_by_id(menu_id=menu_id, submenu_id=submenu_id)
         item = self.crud.update_submenu_data(submenu_id=submenu_id, data=data)
         self.cache.set_submenu_cache(menu_id=menu_id, submenu_id=submenu_id, item=item)

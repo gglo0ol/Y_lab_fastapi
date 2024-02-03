@@ -54,23 +54,23 @@ class CacheRepository:
             return item
         return None
 
-    def update_menu_cache(self, menu_id: str, item: MenuResponse) -> None:
+    def update_menu_cache(self, menu_id: str, item: MenuResponse | dict) -> None:
         self.delete_menu_cache(menu_id=menu_id)
         self.create_menu_cache(menu_id=menu_id, item=item)
 
-    def create_menu_cache(self, menu_id: str, item: MenuResponse) -> None:
+    def create_menu_cache(self, menu_id: str, item: MenuResponse | dict) -> None:
         self.cacher.set(
             MENU_URL.format(menu_id=menu_id), value=pickle.dumps(item), ex=300
         )
 
-    def delete_menu_cache(self, menu_id: id) -> None:
+    def delete_menu_cache(self, menu_id: str) -> None:
         self.cacher.delete(MENU_URL.format(menu_id=menu_id))
 
     def delete_all_menu(self) -> None:
         self.cacher.delete(MENUS_URL)
 
     def set_submenu_cache(
-        self, menu_id: str, submenu_id: str, item: SubmenuResponse
+        self, menu_id: str, submenu_id: str, item: SubmenuResponse | dict
     ) -> None:
         self.cacher.set(
             name=SUBMENU_URL.format(menu_id=menu_id, submenu_id=submenu_id),
@@ -127,7 +127,7 @@ class CacheRepository:
         self.cacher.delete(SUBMENUS_URL.format(menu_id=menu_id))
 
     def set_dish(
-        self, menu_id: str, submenu_id: str, dish_id: str, data: DishResponse
+        self, menu_id: str, submenu_id: str, dish_id: str, data: DishResponse | dict
     ) -> None:
         item = pickle.dumps(data)
         self.cacher.set(
@@ -174,7 +174,7 @@ class CacheRepository:
         return None
 
     def update_dish_by_id(
-        self, menu_id: str, submenu_id: str, dish_id: str, item: DishResponse
+        self, menu_id: str, submenu_id: str, dish_id: str, item: DishResponse | dict
     ) -> None:
         self.delete_dish_by_id(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
         self.set_dish(

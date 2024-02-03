@@ -44,7 +44,7 @@ class MenuService:
         self.update_all_menu()
         return item
 
-    def update_menu(self, menu_id: str, data: MenuCreate) -> MenuResponse:
+    def update_menu(self, menu_id: str, data: MenuCreate) -> MenuResponse | dict:
         item = self.crud.update_menu_data(menu_id=menu_id, data=data)
         self.cacher.update_menu_cache(menu_id=menu_id, item=item)
         self.update_all_menu()

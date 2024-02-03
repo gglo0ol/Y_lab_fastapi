@@ -28,7 +28,7 @@ def update_dish(
     dish_id: str,
     data_in: DishCreate,
     repo: DishesService = Depends(),
-) -> DishResponse:
+) -> DishResponse | dict:
     return repo.update_dish(
         menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, data=data_in
     )

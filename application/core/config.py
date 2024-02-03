@@ -15,7 +15,7 @@ DB_HOST = 'localhost'  # localhost
 # REDIS_HOST = os.getenv("REDIS_HOST")  # localhost
 REDIS_HOST = 'localhost'
 REDIS_PORT = os.getenv('REDIS_PORT')
-REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
+REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"  # noqa
 
 MENUS_URL = '/'
 MENU_URL = '/{menu_id}'
@@ -27,7 +27,7 @@ DISH_URL = '/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}'
 
 class Settings(BaseSettings):
     # localhost:5432
-    connection_db: str = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"
+    connection_db: str = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # noqa
 
 
 settings = Settings()
