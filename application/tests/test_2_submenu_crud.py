@@ -1,14 +1,12 @@
-import pytest
 from fastapi.testclient import TestClient
-
+from menus.views import create_menu_endpoint, delete_menu_endpoint
 from submenus.views import (
     create_submenu_endpoint,
-    get_submenu_endpoint,
-    get_all_submenu_endpoint,
-    update_submenu_endpoint,
     delete_submenu_endpoint,
+    get_all_submenu_endpoint,
+    get_submenu_endpoint,
+    update_submenu_endpoint,
 )
-from menus.views import create_menu_endpoint, delete_menu_endpoint
 from tests.conftest import reverse
 
 

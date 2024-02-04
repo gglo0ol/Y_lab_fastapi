@@ -1,8 +1,5 @@
+from dishes.views import create_dish_endpoint, get_all_dishes_endpoint
 from fastapi.testclient import TestClient
-
-
-from tests.conftest import reverse
-
 from menus.views import (
     create_menu_endpoint,
     delete_menu_endpoint,
@@ -12,13 +9,10 @@ from menus.views import (
 from submenus.views import (
     create_submenu_endpoint,
     delete_submenu_endpoint,
-    get_submenu_endpoint,
     get_all_submenu_endpoint,
+    get_submenu_endpoint,
 )
-from dishes.views import (
-    create_dish_endpoint,
-    get_all_dishes_endpoint,
-)
+from tests.conftest import reverse
 
 
 def test_create_menu(client: TestClient, data_menu_create, saved_data) -> None:

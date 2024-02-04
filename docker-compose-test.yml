@@ -18,6 +18,23 @@ services:
       interval: 10s
       timeout: 30s
       retries: 5
+  redis:
+    image: redis:latest
+    container_name: redis_test
+    restart: always
+    networks:
+      - ylab_network
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env_test
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
   backend:
     build:
       context: .
@@ -32,6 +49,8 @@ services:
       - .env_test
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     command: sh -c "pytest -v"
 networks:

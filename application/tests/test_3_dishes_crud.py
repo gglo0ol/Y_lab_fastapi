@@ -1,15 +1,13 @@
-from fastapi.testclient import TestClient
-
 from dishes.views import (
     create_dish_endpoint,
-    get_dish_endpoint,
-    get_all_dishes_endpoint,
     delete_dish_endpoint,
+    get_all_dishes_endpoint,
+    get_dish_endpoint,
     update_dish_endpoint,
 )
-
+from fastapi.testclient import TestClient
+from menus.views import create_menu_endpoint, delete_menu_endpoint
 from submenus.views import create_submenu_endpoint
-from menus.views import delete_menu_endpoint, create_menu_endpoint
 from tests.conftest import reverse
 
 

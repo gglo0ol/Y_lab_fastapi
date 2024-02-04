@@ -2,7 +2,7 @@ from typing import Callable
 
 import pytest
 from core.config import DB_HOST, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER
-from core.db import Base, engine, get_db
+from core.db import Base, get_db
 from fastapi.testclient import TestClient
 from main import app
 from sqlalchemy import create_engine
