@@ -17,13 +17,13 @@ def test_get_empty_dishes_list(
     create_menu_response = client.post(
         reverse(create_menu_endpoint), json=data_menu_create
     )
-    saved_data["menu"] = create_menu_response.json()
-    menu_id = saved_data["menu"]["id"]
+    saved_data['menu'] = create_menu_response.json()
+    menu_id = saved_data['menu']['id']
     create_submenu_response = client.post(
         reverse(create_submenu_endpoint, menu_id=menu_id), json=data_submenu_create
     )
-    saved_data["submenu"] = create_submenu_response.json()
-    submenu_id = saved_data["submenu"]["id"]
+    saved_data['submenu'] = create_submenu_response.json()
+    submenu_id = saved_data['submenu']['id']
     all_dishes_list_response = client.get(
         reverse(get_all_dishes_endpoint, menu_id=menu_id, submenu_id=submenu_id)
     )
@@ -34,8 +34,8 @@ def test_get_empty_dishes_list(
 def test_create_dish(
     client: TestClient, saved_data: dict, data_dishes_create: dict
 ) -> None:
-    menu_id = saved_data["menu"]["id"]
-    submenu_id = saved_data["submenu"]["id"]
+    menu_id = saved_data['menu']['id']
+    submenu_id = saved_data['submenu']['id']
     dish_create_response = client.post(
         reverse(create_dish_endpoint, menu_id=menu_id, submenu_id=submenu_id),
         json=data_dishes_create,
@@ -43,17 +43,17 @@ def test_create_dish(
     assert dish_create_response.status_code == 201, dish_create_response.text
     dish_data = dish_create_response.json()
     assert all(
-        map(lambda item: item in dish_data, ("id", "title", "description", "price"))
+        map(lambda item: item in dish_data, ('id', 'title', 'description', 'price'))
     )
-    assert dish_data["title"] == data_dishes_create["title"]
-    assert dish_data["description"] == data_dishes_create["description"]
-    assert dish_data["price"] == data_dishes_create["price"]
-    saved_data["dish"] = dish_data
+    assert dish_data['title'] == data_dishes_create['title']
+    assert dish_data['description'] == data_dishes_create['description']
+    assert dish_data['price'] == data_dishes_create['price']
+    saved_data['dish'] = dish_data
 
 
 def test_not_empty_dishes_list(client: TestClient, saved_data: dict) -> None:
-    menu_id = saved_data["menu"]["id"]
-    submenu_id = saved_data["submenu"]["id"]
+    menu_id = saved_data['menu']['id']
+    submenu_id = saved_data['submenu']['id']
     check_not_empty_dishes_list = client.get(
         reverse(get_all_dishes_endpoint, menu_id=menu_id, submenu_id=submenu_id)
     )
@@ -64,9 +64,9 @@ def test_not_empty_dishes_list(client: TestClient, saved_data: dict) -> None:
 
 
 def test_get_dish(client: TestClient, saved_data: dict) -> None:
-    menu_id = saved_data["menu"]["id"]
-    submenu_id = saved_data["submenu"]["id"]
-    dish_id = saved_data["dish"]["id"]
+    menu_id = saved_data['menu']['id']
+    submenu_id = saved_data['submenu']['id']
+    dish_id = saved_data['dish']['id']
     get_dish_response = client.get(
         reverse(
             get_dish_endpoint, menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id
@@ -77,20 +77,20 @@ def test_get_dish(client: TestClient, saved_data: dict) -> None:
     assert all(
         map(
             lambda item: item in dish_data,
-            ("id", "title", "description", "price"),
+            ('id', 'title', 'description', 'price'),
         )
     )
-    assert dish_data["title"] == saved_data["dish"]["title"]
-    assert dish_data["description"] == saved_data["dish"]["description"]
-    assert dish_data["price"] == saved_data["dish"]["price"]
+    assert dish_data['title'] == saved_data['dish']['title']
+    assert dish_data['description'] == saved_data['dish']['description']
+    assert dish_data['price'] == saved_data['dish']['price']
 
 
 def test_update_dish(
     client: TestClient, saved_data: dict, data_dishes_update: dict
 ) -> None:
-    menu_id = saved_data["menu"]["id"]
-    submenu_id = saved_data["submenu"]["id"]
-    dish_id = saved_data["dish"]["id"]
+    menu_id = saved_data['menu']['id']
+    submenu_id = saved_data['submenu']['id']
+    dish_id = saved_data['dish']['id']
 
     update_dish_response = client.patch(
         reverse(
@@ -113,18 +113,18 @@ def test_update_dish(
     assert all(
         map(
             lambda item: item in check_updated_dish_data,
-            ("id", "title", "description", "price"),
+            ('id', 'title', 'description', 'price'),
         )
     )
-    assert check_updated_dish_data["title"] == data_dishes_update["title"]
-    assert check_updated_dish_data["description"] == data_dishes_update["description"]
-    assert check_updated_dish_data["price"] == data_dishes_update["price"]
+    assert check_updated_dish_data['title'] == data_dishes_update['title']
+    assert check_updated_dish_data['description'] == data_dishes_update['description']
+    assert check_updated_dish_data['price'] == data_dishes_update['price']
 
 
 def test_delete_dish(client: TestClient, saved_data: dict) -> None:
-    menu_id = saved_data["menu"]["id"]
-    submenu_id = saved_data["submenu"]["id"]
-    dish_id = saved_data["dish"]["id"]
+    menu_id = saved_data['menu']['id']
+    submenu_id = saved_data['submenu']['id']
+    dish_id = saved_data['dish']['id']
 
     delete_dish_response = client.delete(
         reverse(
@@ -136,8 +136,8 @@ def test_delete_dish(client: TestClient, saved_data: dict) -> None:
     )
     assert delete_dish_response.status_code == 200, delete_dish_response.text
     assert delete_dish_response.json() == {
-        "status": "true",
-        "message": "The dish has been deleted",
+        'status': 'true',
+        'message': 'The dish has been deleted',
     }
     check_dish_response = client.get(
         reverse(
@@ -145,6 +145,6 @@ def test_delete_dish(client: TestClient, saved_data: dict) -> None:
         )
     )
     assert check_dish_response.status_code == 404, check_dish_response.text
-    assert check_dish_response.json() == {"detail": "dish not found"}
+    assert check_dish_response.json() == {'detail': 'dish not found'}
 
     client.delete(reverse(delete_menu_endpoint, menu_id=menu_id))  # DELETE!

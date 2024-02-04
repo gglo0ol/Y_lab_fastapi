@@ -5,12 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcf0f052-12af-4236-b364-2c64c4f5f465" name="Changes" comment="Add query to menu_crud and submenu_crud">
+      <change beforePath="$PROJECT_DIR$/.env_test" beforeDir="false" afterPath="$PROJECT_DIR$/.env_test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Y_lab_lesson1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Y_lab_lesson1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/menus/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/menus/crud.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/menus/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/menus/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/tests/test_2_submenu_crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/tests/test_2_submenu_crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/tests/test_3_dishes_crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/tests/test_3_dishes_crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/tests/test_4_count.py" beforeDir="false" afterPath="$PROJECT_DIR$/application/tests/test_4_count.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,70 +45,70 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.docker-compose.yaml.backend: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yaml.database: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yaml: Compose Deployment.executor": "Run",
-    "Python tests.Python tests for test_menu_crud.test_get_all_menus_empty.executor": "Run",
-    "Python tests.Python tests for test_menu_crud.test_menu.executor": "Run",
-    "Python tests.Python tests for tests.test_menu_crud.test_menu.executor": "Run",
-    "Python tests.pytest for conftest.test_get_db.executor": "Run",
-    "Python tests.pytest for test_1_menu_crud.test_create_menu.executor": "Run",
-    "Python tests.pytest for test_1_menu_crud.test_delete_menu.executor": "Run",
-    "Python tests.pytest for test_1_menu_crud.test_get_menu.executor": "Run",
-    "Python tests.pytest for test_1_menu_crud.test_menu_empty_list.executor": "Run",
-    "Python tests.pytest for test_1_menu_crud.test_menu_not_empty.executor": "Run",
-    "Python tests.pytest for test_1_menu_crud.test_menu_update.executor": "Run",
-    "Python tests.pytest for test_2_submenu_crud.test_submenu_empty_list.executor": "Run",
-    "Python tests.pytest for test_menu_crud.test_create_menu.executor": "Run",
-    "Python tests.pytest for test_menu_crud.test_delete_menu.executor": "Run",
-    "Python tests.pytest for test_menu_crud.test_menu_empty_list.executor": "Run",
-    "Python tests.pytest for test_menu_crud.test_menu_not_empty.executor": "Run",
-    "Python tests.pytest for test_menu_crud.test_menu_update.executor": "Run",
-    "Python tests.pytest for tests.test_2_submenu_crud.test_create_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_2_submenu_crud.test_delete_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_2_submenu_crud.test_get_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_2_submenu_crud.test_submenu_empty_list.executor": "Run",
-    "Python tests.pytest for tests.test_2_submenu_crud.test_submenu_not_empty_list.executor": "Run",
-    "Python tests.pytest for tests.test_2_submenu_crud.test_update_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_3_dishes_crud.test_create_dish.executor": "Run",
-    "Python tests.pytest for tests.test_3_dishes_crud.test_delete_dish.executor": "Run",
-    "Python tests.pytest for tests.test_3_dishes_crud.test_get_dish.executor": "Run",
-    "Python tests.pytest for tests.test_3_dishes_crud.test_get_empty_dishes_list.executor": "Run",
-    "Python tests.pytest for tests.test_3_dishes_crud.test_not_empty_dishes_list.executor": "Run",
-    "Python tests.pytest for tests.test_3_dishes_crud.test_update_dish.executor": "Run",
-    "Python tests.pytest for tests.test_4_count.test_count.executor": "Run",
-    "Python tests.pytest for tests.test_dishes_crud.test_create_dish.executor": "Run",
-    "Python tests.pytest for tests.test_dishes_crud.test_delete_dish.executor": "Run",
-    "Python tests.pytest for tests.test_dishes_crud.test_get_dish.executor": "Run",
-    "Python tests.pytest for tests.test_dishes_crud.test_get_empty_dishes_list.executor": "Run",
-    "Python tests.pytest for tests.test_dishes_crud.test_not_empty_dishes_list.executor": "Run",
-    "Python tests.pytest for tests.test_dishes_crud.test_update_dish.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_create_menu.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_delete_menu.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_get_menu.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_menu.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_menu_empty_list.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_menu_not_empty.executor": "Run",
-    "Python tests.pytest for tests.test_menu_crud.test_menu_update.executor": "Run",
-    "Python tests.pytest for tests.test_submenu_crud.test_create_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_submenu_crud.test_delete_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_submenu_crud.test_get_submenu.executor": "Run",
-    "Python tests.pytest for tests.test_submenu_crud.test_submenu_empty_list.executor": "Run",
-    "Python tests.pytest for tests.test_submenu_crud.test_submenu_not_empty_list.executor": "Run",
-    "Python tests.pytest for tests.test_submenu_crud.test_update_submenu.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
-    "Python.base.executor": "Run",
-    "Python.config.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "/Users/gglol/PycharmProjects/Y_lab_fastapi_github/application",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yaml.backend: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yaml.database: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_menu_crud.test_get_all_menus_empty.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_menu_crud.test_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for tests.test_menu_crud.test_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for conftest.test_get_db.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_1_menu_crud.test_create_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_1_menu_crud.test_delete_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_1_menu_crud.test_get_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_1_menu_crud.test_menu_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_1_menu_crud.test_menu_not_empty.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_1_menu_crud.test_menu_update.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_2_submenu_crud.test_submenu_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_menu_crud.test_create_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_menu_crud.test_delete_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_menu_crud.test_menu_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_menu_crud.test_menu_not_empty.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_menu_crud.test_menu_update.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_2_submenu_crud.test_create_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_2_submenu_crud.test_delete_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_2_submenu_crud.test_get_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_2_submenu_crud.test_submenu_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_2_submenu_crud.test_submenu_not_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_2_submenu_crud.test_update_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_3_dishes_crud.test_create_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_3_dishes_crud.test_delete_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_3_dishes_crud.test_get_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_3_dishes_crud.test_get_empty_dishes_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_3_dishes_crud.test_not_empty_dishes_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_3_dishes_crud.test_update_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_4_count.test_count.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_dishes_crud.test_create_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_dishes_crud.test_delete_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_dishes_crud.test_get_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_dishes_crud.test_get_empty_dishes_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_dishes_crud.test_not_empty_dishes_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_dishes_crud.test_update_dish.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_create_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_delete_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_get_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_menu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_menu_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_menu_not_empty.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_menu_crud.test_menu_update.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_submenu_crud.test_create_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_submenu_crud.test_delete_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_submenu_crud.test_get_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_submenu_crud.test_submenu_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_submenu_crud.test_submenu_not_empty_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_submenu_crud.test_update_submenu.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in tests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.base.executor&quot;: &quot;Run&quot;,
+    &quot;Python.config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gglol/PycharmProjects/Y_lab_fastapi_github/application&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="Y_lab_lesson1" is-module-sdk="true" working-directory="$PROJECT_DIR$/application">

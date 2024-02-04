@@ -6,7 +6,7 @@
     <option name="pathToExecutable" value="/Library/Frameworks/Python.framework/Versions/3.12/bin/black" />
     <option name="sdkName" value="Python 3.12" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (Y_lab_fastapi_github)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12" project-jdk-type="Python SDK" />
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />
   </component>

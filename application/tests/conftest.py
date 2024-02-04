@@ -14,7 +14,7 @@ test_engine = create_engine(url=DATABASE_URL_TEST)
 Base.metadata.bind = test_engine
 
 
-@pytest.fixture(name="session", scope="session")
+@pytest.fixture(name='session', scope='session')
 def session_fixture():
     # test_engine = create_engine(url=DATABASE_URL_TEST)
     TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
@@ -27,7 +27,7 @@ def session_fixture():
         session.close()
 
 
-@pytest.fixture(name="client", scope="session")
+@pytest.fixture(name='client', scope='session')
 def client_fixture(session: Session):
     def get_session_override():
         return session
@@ -38,7 +38,7 @@ def client_fixture(session: Session):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope='session', autouse=True)
 def setup_bd():
     Base.metadata.create_all(bind=test_engine)
     try:
@@ -49,15 +49,15 @@ def setup_bd():
 
 @pytest.fixture
 def data_menu_create():
-    json_create_menu = {"title": "My menu 1", "description": "My menu description 1"}
+    json_create_menu = {'title': 'My menu 1', 'description': 'My menu description 1'}
     return json_create_menu
 
 
 @pytest.fixture
 def data_menu_update():
     json_update_menu = {
-        "title": "My updated menu 1",
-        "description": "My updated menu description 1",
+        'title': 'My updated menu 1',
+        'description': 'My updated menu description 1',
     }
     return json_update_menu
 
@@ -65,8 +65,8 @@ def data_menu_update():
 @pytest.fixture
 def data_submenu_create():
     json_submenu_create = {
-        "title": "My submenu 1",
-        "description": "My submenu description 1",
+        'title': 'My submenu 1',
+        'description': 'My submenu description 1',
     }
     return json_submenu_create
 
@@ -74,8 +74,8 @@ def data_submenu_create():
 @pytest.fixture
 def data_submenu_update():
     json_submenu_update = {
-        "title": "My updated submenu 1",
-        "description": "My updated submenu description 1",
+        'title': 'My updated submenu 1',
+        'description': 'My updated submenu description 1',
     }
     return json_submenu_update
 
@@ -83,9 +83,9 @@ def data_submenu_update():
 @pytest.fixture
 def data_dishes_create():
     json_dishes_create = {
-        "title": "My dish 1",
-        "description": "My dish description 1",
-        "price": "12.50",
+        'title': 'My dish 1',
+        'description': 'My dish description 1',
+        'price': '12.50',
     }
     return json_dishes_create
 
@@ -93,9 +93,9 @@ def data_dishes_create():
 @pytest.fixture
 def data_dishes_update():
     json_dishes_update = {
-        "title": "My updated dish 1",
-        "description": "My updated dish description 1",
-        "price": "14.50",
+        'title': 'My updated dish 1',
+        'description': 'My updated dish description 1',
+        'price': '14.50',
     }
     return json_dishes_update
 
@@ -111,6 +111,6 @@ def reverse(function: Callable, **kwargs) -> str:
     return path.format(**kwargs)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope='module')
 def saved_data() -> dict:
     return {}
