@@ -10,46 +10,6 @@ from menus.views import (
 from tests.conftest import reverse
 
 
-# def create_menu_by_id(
-#     client: TestClient,
-#     data_create_menu: dict,
-# ):
-#     response = client.post("/api/v1/menus/", json=data_create_menu)
-#     return response
-#
-#
-# def create_menu(
-#     client: TestClient,
-#     data_create_menu: dict,
-# ):
-#     response = client.post("/api/v1/menus/", json=data_create_menu)
-#     return response
-#
-#
-# def get_all_menus(client: TestClient):
-#     response = client.get("/api/v1/menus/")
-#     return response
-#
-#
-# def get_menu(menu_id: str, client: TestClient):
-#     response = client.get(f"/api/v1/menus/{menu_id}")
-#     return response
-#
-#
-# def update_menu(
-#     menu_id,
-#     client: TestClient,
-#     data_update_menu: dict,
-# ):
-#     response = client.patch(f"/api/v1/menus/{menu_id}", json=data_update_menu)
-#     return response
-#
-#
-# def delete_menu(menu_id: str, client: TestClient):
-#     response = client.delete(f"/api/v1/menus/{menu_id}")
-#     return response
-
-
 def test_menu_empty_list(client: TestClient) -> None:
     response = client.get(reverse(get_all_menus_endpoint))
     assert response.status_code == 200, response.text
