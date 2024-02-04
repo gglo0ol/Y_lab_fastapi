@@ -24,7 +24,6 @@ DISH_URL = '/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}'
 
 
 class Settings(BaseSettings):
-    # localhost:5432
     connection_db: str = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # noqa
 
 
