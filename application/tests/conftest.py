@@ -10,6 +10,41 @@ from sqlalchemy.orm import Session, sessionmaker
 
 # localhost:5555
 DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # noqa
+test_engine = create_engine(url=DATABASE_URL_TEST)
+Base.metadata.bind = test_engine
+
+
+@pytest.fixture(name="session", scope="session")
+def session_fixture():
+    # test_engine = create_engine(url=DATABASE_URL_TEST)
+    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
+    session = TestSession()
+    # Base.metadata.drop_all(bind=test_engine)
+    # Base.metadata.create_all(bind=test_engine)
+    try:
+        yield session
+    finally:
+        session.close()
+
+
+@pytest.fixture(name="client", scope="session")
+def client_fixture(session: Session):
+    def get_session_override():
+        return session
+
+    app.dependency_overrides[get_db] = get_session_override
+    client = TestClient(app)
+    yield client
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_bd():
+    Base.metadata.create_all(bind=test_engine)
+    try:
+        yield
+    finally:
+        Base.metadata.clear()
 
 
 @pytest.fixture
@@ -63,39 +98,6 @@ def data_dishes_update():
         "price": "14.50",
     }
     return json_dishes_update
-
-
-@pytest.fixture(autouse=True, scope="session")
-def setup_bd():
-    Base.metadata.create_all(bind=engine)
-    try:
-        yield
-    finally:
-        Base.metadata.drop_all(bind=engine)
-
-
-@pytest.fixture(name="session", scope="module")
-def session_fixture():
-    test_engine = create_engine(url=DATABASE_URL_TEST)
-    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
-    session = TestSession()
-    try:
-        yield session
-    finally:
-        session.close()
-
-
-@pytest.fixture(name="client", scope="module")
-def client_fixture(session: Session):
-    def get_session_override():
-        return session
-
-    app.dependency_overrides[get_db] = get_session_override
-    client = TestClient(app)
-
-    yield client
-
-    app.dependency_overrides.clear()
 
 
 def get_routs() -> dict:
