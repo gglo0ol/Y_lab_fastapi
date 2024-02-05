@@ -16,11 +16,8 @@ Base.metadata.bind = test_engine
 
 @pytest.fixture(name='session', scope='session')
 def session_fixture():
-    # test_engine = create_engine(url=DATABASE_URL_TEST)
     TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
     session = TestSession()
-    # Base.metadata.drop_all(bind=test_engine)
-    # Base.metadata.create_all(bind=test_engine)
     try:
         yield session
     finally:

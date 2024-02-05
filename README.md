@@ -115,3 +115,86 @@ _**CRUD – create/update/retrieve/delete._
 ![img_3.png](img_3.png)
 
 </details>
+
+## Задание 3
+
+
+<details>
+<summary> Паттерны и принципы разработки </summary>
+<details>
+<summary>Описание</summary>
+1.Вынести бизнес логику и запросы в БД в отдельные слои приложения.
+
+2.Добавить кэширование запросов к API с использованием Redis. Не забыть про инвалидацию кэша.
+
+3.Добавить pre-commit хуки в проект. Файл yaml будет прикреплен к ДЗ.
+
+4.Покрыть проект type hints (тайпхинтами)
+
+5.* Описать ручки API в соответствий c OpenAPI
+
+6.** Реализовать в тестах аналог Django reverse() для FastAPI
+
+Требования:
+
+●Код должен проходить все линтеры.
+
+●Код должен соответствовать принципам SOLID, DRY, KISS.
+
+●Проект должен запускаться по одной команде (докер).
+
+●Проект должен проходить все Postman тесты (коллекция с Вебинара №1).
+
+●Тесты написанные вами после Вебинара №2, должны быть актуальны, запускать и успешно проходить
+
+Дополнительно:
+Контейнеры с проектом и с тестами запускаются разными командами.
+</details>
+<details>
+<summary>Установка</summary>
+* Клонируем проект из Git. Для этого вводим команду
+
+`git clone https://github.com/gglo0ol/Y_lab_fastapi`
+
+* Заходим в папку с проектом.
+* \* Для запуска тестов вводим в терминале команду
+
+`docker compose -f docker-compose-test.yml up -d && docker logs --follow backend && docker compose -f docker-compose-test.yml down -v`
+
+при этом поднимается тестовая БД и логи тестов у нас будут отображаться в терминале
+
+* Чтобы запустить само приложение с БД
+
+`docker compose up -d`
+
+* Прложение будет доступно по ссылке
+
+`http://0.0.0.0:8000/docs`
+
+* Чтобы завершить выполнение
+
+`docker compose down -v`
+
+Чтобы установить pre-commit хуки, нужно выполнить команду
+
+` pre-commit run --all-files`
+
+При этом удалятся все временные файлы
+
+### Пункт 6 (функция reverse) реализована в файле tests/conftest.py:
+
+    def get_routs() -> dict:
+        result = {rout.endpoint.__name__: rout.path for rout in app.routes}
+        return result
+
+    def reverse(function: Callable, **kwargs) -> str:
+        routes = get_routs()
+        path = routes[function.__name__]
+        return path.format(**kwargs)
+</details>
+
+
+
+
+
+</details>
