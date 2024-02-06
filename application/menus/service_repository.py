@@ -32,26 +32,21 @@ class MenuService:
         self.cacher.set_menu_submenus_and_dishes_count(menu_id=menu_id, item=item)
         return item
 
-    def update_all_menu(self) -> None:
-        self.cacher.delete_all_menu()
-        item = self.crud.get_all_menus()
-        self.cacher.set_all_menu_cache(item)
-
     def create_menu(self, data: MenuCreate) -> MenuResponse:
         item = self.crud.create_menu(data)
         menu_id = item.id
         self.cacher.create_menu_cache(menu_id=menu_id, item=item)
-        self.update_all_menu()
+        self.cacher.delete_all_menu()
         return item
 
     def update_menu(self, menu_id: str, data: MenuCreate) -> MenuResponse | dict:
         item = self.crud.update_menu_data(menu_id=menu_id, data=data)
-        self.cacher.update_menu_cache(menu_id=menu_id, item=item)
-        self.update_all_menu()
+        self.cacher.delete_menu_cache(menu_id=menu_id)
+        self.cacher.delete_all_menu()
         return item
 
     def delete_menu(self, menu_id: str) -> dict:
         self.cacher.delete_menu_cache(menu_id=menu_id)
         item = self.crud.delete_menu_data(menu_id=menu_id)
-        self.update_all_menu()
+        self.cacher.delete_all_menu()
         return item

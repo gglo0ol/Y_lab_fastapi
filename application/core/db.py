@@ -11,7 +11,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 # Dependency to get the database session
-def get_db():
+def get_db()-> SessionLocal:
     db = SessionLocal()
     try:
         yield db
@@ -23,12 +23,12 @@ def get_uuid() -> str:
     return str(uuid4())
 
 
-def create_redis():
+def create_redis()-> ConnectionPool:
     return ConnectionPool.from_url(REDIS_URL)
 
 
 pool = create_redis()
 
 
-def get_redis():
+def get_redis()-> Redis:
     return Redis(connection_pool=pool)

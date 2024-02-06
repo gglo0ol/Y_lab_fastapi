@@ -28,7 +28,7 @@ class CacheRepository:
             name=MENU_URL.format(menu_id=menu_id), value=pickle.dumps(item), ex=300
         )
 
-    def set_menu_submenus_and_dishes_count(self, menu_id: str, item) -> None:
+    def set_menu_submenus_and_dishes_count(self, menu_id: str, item: dict) -> None:
         self.cacher.set(
             name=f"{menu_id}/submenus_and_dishes_count", value=pickle.dumps(item)
         )
@@ -53,10 +53,6 @@ class CacheRepository:
             item = pickle.loads(cache)
             return item
         return None
-
-    def update_menu_cache(self, menu_id: str, item: MenuResponse | dict) -> None:
-        self.delete_menu_cache(menu_id=menu_id)
-        self.create_menu_cache(menu_id=menu_id, item=item)
 
     def create_menu_cache(self, menu_id: str, item: MenuResponse | dict) -> None:
         self.cacher.set(
@@ -103,20 +99,12 @@ class CacheRepository:
             return item
         return None
 
-    def get_all_submenus(self, menu_id) -> list[SubmenuResponse] | None:
+    def get_all_submenus(self, menu_id: str) -> list[SubmenuResponse] | None:
         cache = self.cacher.get(name=SUBMENUS_URL.format(menu_id=menu_id))
         if cache:
             item = pickle.loads(cache)
             return item
         return None
-
-    def update_submenu_by_id(
-        self, menu_id: str, submenu_id: str, item: SubmenuResponse
-    ) -> None:
-        self.delete_submenu_by_id(menu_id=menu_id, submenu_id=submenu_id)
-        self.set_submenu_cache(menu_id=menu_id, submenu_id=submenu_id, item=item)
-        self.delete_all_menu()
-        self.delete_menu_cache(menu_id=menu_id)
 
     def delete_submenu_by_id(self, menu_id: str, submenu_id: str) -> None:
         self.cacher.delete(SUBMENU_URL.format(menu_id=menu_id, submenu_id=submenu_id))
@@ -172,18 +160,6 @@ class CacheRepository:
             item = pickle.loads(cache)
             return item
         return None
-
-    def update_dish_by_id(
-        self, menu_id: str, submenu_id: str, dish_id: str, item: DishResponse | dict
-    ) -> None:
-        self.delete_dish_by_id(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
-        self.set_dish(
-            menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, data=item
-        )
-        self.delete_all_menu()
-        self.delete_all_submenus(menu_id=menu_id)
-        self.delete_menu_cache(menu_id=menu_id)
-        self.delete_submenu_by_id(menu_id=menu_id, submenu_id=submenu_id)
 
     def delete_dish_by_id(self, menu_id: str, submenu_id: str, dish_id: str) -> None:
         self.cacher.delete(

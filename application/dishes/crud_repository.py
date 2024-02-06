@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 
 class DishesRepository:
-    def __init__(self, db: Session = Depends(get_db)):
+    def __init__(self, db: Session = Depends(get_db)) -> None:
         self.db = db
 
     def create_dish(
@@ -34,15 +34,15 @@ class DishesRepository:
 
         if db_dish:
             item = {
-                'id': db_dish.id,
-                'submenu_id': db_dish.submenu_id,
-                'title': db_dish.title,
-                'description': db_dish.description,
-                'price': db_dish.price,
+                "id": db_dish.id,
+                "submenu_id": db_dish.submenu_id,
+                "title": db_dish.title,
+                "description": db_dish.description,
+                "price": db_dish.price,
             }
             return DishResponse(**item)
         else:
-            raise HTTPException(status_code=404, detail='dish not found')
+            raise HTTPException(status_code=404, detail="dish not found")
 
     def get_all_dishes_data(self, submenu_id: str) -> list[DishResponse]:
         db_dish = self.db.query(Dish).filter(Dish.submenu_id == submenu_id).all()
@@ -68,13 +68,13 @@ class DishesRepository:
             self.db.refresh(db_dish)
             return self.get_dish_data(submenu_id=db_dish.submenu_id, dish_id=db_dish.id)
         else:
-            return {'detail': 'dish not found'}
+            return {"detail": "dish not found"}
 
     def delete_dish_data(self, dish_id: str) -> dict:
         db_dish = self.db.query(Dish).filter(Dish.id == dish_id).first()
         if db_dish:
             self.db.delete(db_dish)
             self.db.commit()
-            return {'status': 'true', 'message': 'The dish has been deleted'}
+            return {"status": "true", "message": "The dish has been deleted"}
         else:
-            return {'detail': 'dish not found'}
+            return {"detail": "dish not found"}

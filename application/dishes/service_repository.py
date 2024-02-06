@@ -31,7 +31,8 @@ class DishesService:
         self.cacher.set_dish(
             menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, data=item
         )
-        self.update_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
+        self.cacher.delete_all_menu()
+        self.cacher.delete_all_submenus(menu_id=menu_id)
         return item
 
     def get_all_dishes(
@@ -41,7 +42,6 @@ class DishesService:
     ) -> list[DishResponse]:
         cache = self.cacher.get_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
         if cache:
-            # item = pickle.loads(cache)
             return cache
         item = self.crud.get_all_dishes_data(submenu_id=submenu_id)
         self.cacher.set_all_dishes(menu_id=menu_id, submenu_id=submenu_id, item=item)
@@ -51,10 +51,11 @@ class DishesService:
         self, menu_id: str, submenu_id: str, dish_id: str, data: DishCreate
     ) -> DishResponse | dict:
         item = self.crud.update_dish_data(dish_id=dish_id, data=data)
-        self.cacher.update_dish_by_id(
-            menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, item=item
+        self.cacher.delete_dish_by_id(
+            menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id
         )
-        self.update_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
+        self.cacher.delete_all_menu()
+        self.cacher.delete_all_submenus(menu_id=menu_id)
         return item
 
     def delete_dish(self, menu_id: str, submenu_id: str, dish_id: str) -> dict:
@@ -62,10 +63,6 @@ class DishesService:
             menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id
         )
         item = self.crud.delete_dish_data(dish_id=dish_id)
-        self.update_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
+        self.cacher.delete_all_menu()
+        self.cacher.delete_all_submenus(menu_id=menu_id)
         return item
-
-    def update_all_dishes(self, menu_id: str, submenu_id: str) -> None:
-        self.cacher.delete_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
-        item = self.crud.get_all_dishes_data(submenu_id=submenu_id)
-        self.cacher.set_all_dishes(menu_id=menu_id, submenu_id=submenu_id, item=item)
