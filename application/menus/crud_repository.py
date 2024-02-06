@@ -32,7 +32,7 @@ class MenuRepository:
             }
             return MenuResponse(**data)
         else:
-            raise NoResultFound('Menu not found')
+            raise NoResultFound('menu not found')
 
     def get_submenu_and_dishes_count(self, menu_id: str) -> dict:
         count_submenu_and_dishes = (
@@ -82,7 +82,7 @@ class MenuRepository:
             self.db.refresh(db_menu)
             return self.get_menu_data(menu_id=menu_id)
         else:
-            raise NoResultFound('Menu not found')
+            raise NoResultFound('menu not found')
 
     def delete_menu_data(self, menu_id: str) -> dict:
         db_menu = self.db.query(Menu).filter(Menu.id == menu_id).first()
@@ -91,4 +91,4 @@ class MenuRepository:
             self.db.commit()
             return {'status': 'true', 'message': 'The menu has been deleted'}
         else:
-            raise NoResultFound('Menu not found')
+            raise NoResultFound('menu not found')
