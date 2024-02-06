@@ -65,4 +65,5 @@ class DishesService:
         item = self.crud.delete_dish_data(dish_id=dish_id)
         self.cacher.delete_all_menu()
         self.cacher.delete_all_submenus(menu_id=menu_id)
+        self.cacher.delete_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
         return item

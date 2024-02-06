@@ -1,9 +1,10 @@
 from core.db import get_db
 from core.models.base import Dish, Menu, Submenu
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from menus.schemas import MenuCreate, MenuResponse
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class MenuRepository:
@@ -31,7 +32,7 @@ class MenuRepository:
             }
             return MenuResponse(**data)
         else:
-            raise HTTPException(status_code=404, detail='menu not found')
+            raise NoResultFound('Menu not found')
 
     def get_submenu_and_dishes_count(self, menu_id: str) -> dict:
         count_submenu_and_dishes = (
@@ -81,7 +82,7 @@ class MenuRepository:
             self.db.refresh(db_menu)
             return self.get_menu_data(menu_id=menu_id)
         else:
-            return {'detail': 'menu not found'}
+            raise NoResultFound('Menu not found')
 
     def delete_menu_data(self, menu_id: str) -> dict:
         db_menu = self.db.query(Menu).filter(Menu.id == menu_id).first()
@@ -90,4 +91,4 @@ class MenuRepository:
             self.db.commit()
             return {'status': 'true', 'message': 'The menu has been deleted'}
         else:
-            return {'detail': 'menu not found'}
+            raise NoResultFound('Menu not found')

@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm.exc import NoResultFound
 from submenus.schemas import SubmenuCreate, SubmenuResponse
 from submenus.servise_repository import SubmenuService
 
@@ -20,11 +21,19 @@ def create_submenu_endpoint(
     )
 
 
-@router.get('/{submenu_id}', response_model=SubmenuResponse, summary='Получить подменю')
+@router.get(
+    '/{submenu_id}',
+    response_model=SubmenuResponse,
+    summary='Получить подменю',
+    responses={404: {'description': 'Submenu not found'}},
+)
 def get_submenu_endpoint(
     menu_id: str, submenu_id: str, repo: SubmenuService = Depends()
 ) -> SubmenuResponse:
-    return repo.get_submenu_by_id(submenu_id=submenu_id, menu_id=menu_id)
+    try:
+        return repo.get_submenu_by_id(submenu_id=submenu_id, menu_id=menu_id)
+    except NoResultFound as error:
+        raise HTTPException(status_code=404, detail=error.args[0])
 
 
 @router.get(
@@ -39,7 +48,10 @@ def get_all_submenu_endpoint(
 
 
 @router.patch(
-    '/{submenu_id}', response_model=SubmenuResponse, summary='Обновить подменю'
+    '/{submenu_id}',
+    response_model=SubmenuResponse,
+    summary='Обновить подменю',
+    responses={404: {'description': 'Submenu not found'}},
 )
 def update_submenu_endpoint(
     menu_id: str,
@@ -47,16 +59,23 @@ def update_submenu_endpoint(
     data_in: SubmenuCreate,
     repo: SubmenuService = Depends(),
 ) -> SubmenuResponse | dict:
-    return repo.update_submenu_by_id(
-        submenu_id=submenu_id, data=data_in, menu_id=menu_id
-    )
+    try:
+        return repo.update_submenu_by_id(
+            submenu_id=submenu_id, data=data_in, menu_id=menu_id
+        )
+    except NoResultFound as error:
+        raise HTTPException(status_code=404, detail=error.args[0])
 
 
 @router.delete(
     '/{submenu_id}',
     summary='Удалить подменю (при этом удалятся все блюда этого подменю)',
+    responses={404: {'description': 'Submenu not found'}},
 )
 def delete_submenu_endpoint(
     menu_id: str, submenu_id: str, repo: SubmenuService = Depends()
 ) -> dict:
-    return repo.delete_submenu_by_id(submenu_id=submenu_id, menu_id=menu_id)
+    try:
+        return repo.delete_submenu_by_id(submenu_id=submenu_id, menu_id=menu_id)
+    except NoResultFound as error:
+        raise HTTPException(status_code=404, detail=error.args[0])

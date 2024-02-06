@@ -50,6 +50,6 @@ class SubmenuService:
         self.cache.delete_submenu_by_id(menu_id=menu_id, submenu_id=submenu_id)
         item = self.crud.delete_submenu_data(submenu_id=submenu_id)
         self.cache.delete_all_menu()
-        self.cache.delete_all_submenus()
+        self.cache.delete_all_submenus(menu_id=menu_id)
         self.cache.delete_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
         return item

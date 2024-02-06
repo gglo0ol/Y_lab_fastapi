@@ -1,7 +1,8 @@
 from core.db import get_db
 from core.models.base import Dish, Submenu
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
 from submenus.schemas import SubmenuCreate, SubmenuResponse
 
 
@@ -27,7 +28,7 @@ class SubmenuRepository:
             }
             return SubmenuResponse(**data)
         else:
-            raise HTTPException(status_code=404, detail='submenu not found')
+            raise NoResultFound('submenu not found')
 
     def get_all_submenu_data(self, menu_id: str) -> list[SubmenuResponse]:
         db_submenu = self.db.query(Submenu).filter(Submenu.menu_id == menu_id).all()
@@ -63,7 +64,7 @@ class SubmenuRepository:
                 submenu_id=db_submenu.id, menu_id=db_submenu.menu_id
             )
         else:
-            return {'detail': 'submenu not found'}
+            raise NoResultFound('submenu not found')
 
     def delete_submenu_data(self, submenu_id: str) -> dict:
         db_submenu = self.db.query(Submenu).filter(Submenu.id == submenu_id).first()
@@ -72,4 +73,4 @@ class SubmenuRepository:
             self.db.commit()
             return {'status': 'true', 'message': 'The submenu has been deleted'}
         else:
-            return {'details': 'menu not found'}
+            raise NoResultFound('submenu not found')

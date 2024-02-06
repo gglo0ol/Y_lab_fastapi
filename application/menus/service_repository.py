@@ -2,6 +2,7 @@ from core.cache_repository import CacheRepository
 from fastapi import Depends
 from menus.crud_repository import MenuRepository
 from menus.schemas import MenuCreate, MenuResponse
+from sqlalchemy.exc import NoResultFound
 
 
 class MenuService:
@@ -29,8 +30,11 @@ class MenuService:
 
     def get_menu_submenus_and_dishes_count(self, menu_id: str) -> dict:
         item = self.crud.get_submenu_and_dishes_count(menu_id=menu_id)
-        self.cacher.set_menu_submenus_and_dishes_count(menu_id=menu_id, item=item)
-        return item
+        if item:
+            self.cacher.set_menu_submenus_and_dishes_count(menu_id=menu_id, item=item)
+            return item
+        else:
+            raise NoResultFound('Menu not found')
 
     def create_menu(self, data: MenuCreate) -> MenuResponse:
         item = self.crud.create_menu(data)

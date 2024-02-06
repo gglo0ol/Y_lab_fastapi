@@ -1,8 +1,9 @@
 from core.db import get_db
 from core.models.base import Dish
 from dishes.schemas import DishCreate, DishResponse
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class DishesRepository:
@@ -34,15 +35,15 @@ class DishesRepository:
 
         if db_dish:
             item = {
-                "id": db_dish.id,
-                "submenu_id": db_dish.submenu_id,
-                "title": db_dish.title,
-                "description": db_dish.description,
-                "price": db_dish.price,
+                'id': db_dish.id,
+                'submenu_id': db_dish.submenu_id,
+                'title': db_dish.title,
+                'description': db_dish.description,
+                'price': db_dish.price,
             }
             return DishResponse(**item)
         else:
-            raise HTTPException(status_code=404, detail="dish not found")
+            raise NoResultFound('dish not found')
 
     def get_all_dishes_data(self, submenu_id: str) -> list[DishResponse]:
         db_dish = self.db.query(Dish).filter(Dish.submenu_id == submenu_id).all()
@@ -68,13 +69,13 @@ class DishesRepository:
             self.db.refresh(db_dish)
             return self.get_dish_data(submenu_id=db_dish.submenu_id, dish_id=db_dish.id)
         else:
-            return {"detail": "dish not found"}
+            raise NoResultFound('dish not found')
 
     def delete_dish_data(self, dish_id: str) -> dict:
         db_dish = self.db.query(Dish).filter(Dish.id == dish_id).first()
         if db_dish:
             self.db.delete(db_dish)
             self.db.commit()
-            return {"status": "true", "message": "The dish has been deleted"}
+            return {'status': 'true', 'message': 'The dish has been deleted'}
         else:
-            return {"detail": "dish not found"}
+            raise NoResultFound('dish not found')

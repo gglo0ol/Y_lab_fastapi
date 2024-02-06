@@ -1,6 +1,7 @@
 from dishes.schemas import DishCreate, DishResponse
 from dishes.service_repository import DishesService
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm.exc import NoResultFound
 
 router = APIRouter(
     tags=['Dishes'], prefix='/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes'
@@ -16,14 +17,30 @@ def create_dish_endpoint(
     return repo.create_dish(menu_id=menu_id, submenu_id=submenu_id, data=data_in)
 
 
-@router.get('/{dish_id}', response_model=DishResponse, summary='Получить блюдо')
+@router.get(
+    '/{dish_id}',
+    response_model=DishResponse,
+    summary='Получить блюдо',
+    responses={404: {'description': 'Dish not found'}},
+)
 def get_dish_endpoint(
-    menu_id: str, submenu_id: str, dish_id: str, repo: DishesService = Depends()
+    menu_id: str,
+    submenu_id: str,
+    dish_id: str,
+    repo: DishesService = Depends(),
 ) -> DishResponse:
-    return repo.get_dish(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
+    try:
+        return repo.get_dish(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
+    except NoResultFound as error:
+        raise HTTPException(status_code=404, detail=error.args[0])
 
 
-@router.patch('/{dish_id}', response_model=DishResponse, summary='Обновить блюдо')
+@router.patch(
+    '/{dish_id}',
+    response_model=DishResponse,
+    summary='Обновить блюдо',
+    responses={404: {'description': 'Dish not found'}},
+)
 def update_dish_endpoint(
     menu_id: str,
     submenu_id: str,
@@ -31,16 +48,26 @@ def update_dish_endpoint(
     data_in: DishCreate,
     repo: DishesService = Depends(),
 ) -> DishResponse | dict:
-    return repo.update_dish(
-        menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, data=data_in
-    )
+    try:
+        return repo.update_dish(
+            menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id, data=data_in
+        )
+    except NoResultFound as error:
+        raise HTTPException(status_code=404, detail=error.args[0])
 
 
-@router.delete('/{dish_id}', summary='Удалить блюдо')
+@router.delete(
+    '/{dish_id}',
+    summary='Удалить блюдо',
+    responses={404: {'description': 'Dish not found'}},
+)
 def delete_dish_endpoint(
     menu_id: str, submenu_id: str, dish_id: str, repo: DishesService = Depends()
 ) -> dict:
-    return repo.delete_dish(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
+    try:
+        return repo.delete_dish(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
+    except NoResultFound as error:
+        raise HTTPException(status_code=404, detail=error.args[0])
 
 
 @router.get(
@@ -50,5 +77,5 @@ def delete_dish_endpoint(
 )
 def get_all_dishes_endpoint(
     menu_id: str, submenu_id: str, repo: DishesService = Depends()
-):
+) -> list[DishResponse]:
     return repo.get_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
