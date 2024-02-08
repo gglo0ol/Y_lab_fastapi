@@ -1,12 +1,12 @@
 import pickle
 from typing import Sequence
 
-from application.core.cache_repository import CacheRepository
+from core.cache_repository import CacheRepository
 from fastapi import Depends, BackgroundTasks
-from application.menus.crud_repository import MenuRepository
-from application.menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
+from menus.crud_repository import MenuRepository
+from menus.schemas import MenuCreate, MenuResponse
 from sqlalchemy.exc import NoResultFound
-from application.core.models.base import Menu
+from core.models.base import Menu
 
 
 class MenuService:

@@ -1,60 +1,64 @@
 from typing import Callable
 
 import pytest
-from core.config import DB_HOST, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER
+from core.config import (
+    DB_HOST,
+    POSTGRES_DB,
+    POSTGRES_PASSWORD,
+    POSTGRES_USER,
+)
 from core.db import Base, get_db
-from fastapi.testclient import TestClient
 from main import app
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+import asyncio
+from httpx import AsyncClient
+
 
 # localhost:5555
-DATABASE_URL_TEST = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # noqa
-test_engine = create_engine(url=DATABASE_URL_TEST)
-Base.metadata.bind = test_engine
+DATABASE_URL_TEST = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"  # noqa
+test_engine = create_async_engine(url=DATABASE_URL_TEST)
+TestAsyncLocalSession = sessionmaker(
+    autoflush=False, autocommit=False, bind=test_engine, class_=AsyncSession
+)
 
 
-@pytest.fixture(name='session', scope='session')
-def session_fixture():
-    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
-    session = TestSession()
-    try:
-        yield session
-    finally:
-        session.close()
+async def override_db():
+    async with TestAsyncLocalSession() as async_session:
+        yield async_session
 
 
-@pytest.fixture(name='client', scope='session')
-def client_fixture(session: Session):
-    def get_session_override():
-        return session
-
-    app.dependency_overrides[get_db] = get_session_override
-    client = TestClient(app)
-    yield client
-    app.dependency_overrides.clear()
+@pytest.fixture(scope="session")
+def event_loop(request):
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
-@pytest.fixture(scope='session', autouse=True)
-def setup_bd():
-    Base.metadata.create_all(bind=test_engine)
-    try:
-        yield
-    finally:
-        Base.metadata.clear()
+@pytest.fixture(autouse=True, scope="function")
+async def init_db():
+    async with test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+@pytest.fixture(scope="session", name="client")
+async def client():
+    app.dependency_overrides = {get_db: override_db}
+    async with AsyncClient(app=app, base_url="http://test") as client:
+        yield client
 
 
 @pytest.fixture
 def data_menu_create():
-    json_create_menu = {'title': 'My menu 1', 'description': 'My menu description 1'}
+    json_create_menu = {"title": "My menu 1", "description": "My menu description 1"}
     return json_create_menu
 
 
 @pytest.fixture
 def data_menu_update():
     json_update_menu = {
-        'title': 'My updated menu 1',
-        'description': 'My updated menu description 1',
+        "title": "My updated menu 1",
+        "description": "My updated menu description 1",
     }
     return json_update_menu
 
@@ -62,8 +66,8 @@ def data_menu_update():
 @pytest.fixture
 def data_submenu_create():
     json_submenu_create = {
-        'title': 'My submenu 1',
-        'description': 'My submenu description 1',
+        "title": "My submenu 1",
+        "description": "My submenu description 1",
     }
     return json_submenu_create
 
@@ -71,8 +75,8 @@ def data_submenu_create():
 @pytest.fixture
 def data_submenu_update():
     json_submenu_update = {
-        'title': 'My updated submenu 1',
-        'description': 'My updated submenu description 1',
+        "title": "My updated submenu 1",
+        "description": "My updated submenu description 1",
     }
     return json_submenu_update
 
@@ -80,9 +84,9 @@ def data_submenu_update():
 @pytest.fixture
 def data_dishes_create():
     json_dishes_create = {
-        'title': 'My dish 1',
-        'description': 'My dish description 1',
-        'price': '12.50',
+        "title": "My dish 1",
+        "description": "My dish description 1",
+        "price": "12.50",
     }
     return json_dishes_create
 
@@ -90,9 +94,9 @@ def data_dishes_create():
 @pytest.fixture
 def data_dishes_update():
     json_dishes_update = {
-        'title': 'My updated dish 1',
-        'description': 'My updated dish description 1',
-        'price': '14.50',
+        "title": "My updated dish 1",
+        "description": "My updated dish description 1",
+        "price": "14.50",
     }
     return json_dishes_update
 
@@ -108,6 +112,6 @@ def reverse(function: Callable, **kwargs) -> str:
     return path.format(**kwargs)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def saved_data() -> dict:
     return {}

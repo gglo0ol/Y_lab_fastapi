@@ -2,8 +2,8 @@ from fastapi import Depends, APIRouter, HTTPException, BackgroundTasks
 from sqlalchemy.exc import NoResultFound
 from typing import Sequence
 
-from application.menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
-from application.menus.service_repository import MenuService
+from menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
+from menus.service_repository import MenuService
 
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
 

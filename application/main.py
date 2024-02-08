@@ -1,9 +1,9 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
 
-from application.core.db import init_db
-from application.menus.views import router as menu_router
-from application.submenus.views import router as submenu_router
-from application.dishes.views import router as dish_router
+from core.db import init_db
+from menus.views import router as menu_router
+from submenus.views import router as submenu_router
+from dishes.views import router as dish_router
 
 
 app = FastAPI()

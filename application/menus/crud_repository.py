@@ -1,7 +1,7 @@
-from application.core.db import get_db
-from application.core.models.base import Dish, Menu, Submenu
+from core.db import get_db
+from core.models.base import Dish, Menu, Submenu
 from fastapi import Depends
-from application.menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
+from menus.schemas import MenuCreate, MenuResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound

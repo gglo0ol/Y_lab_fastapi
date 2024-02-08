@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from uuid import UUID
-from application.dishes.schemas import DishResponse
+from dishes.schemas import DishResponse
 
 
 class SubmenuCreate(BaseModel):

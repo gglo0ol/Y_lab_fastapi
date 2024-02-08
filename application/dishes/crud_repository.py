@@ -1,6 +1,6 @@
-from application.core.db import get_db
-from application.core.models.base import Dish
-from application.dishes.schemas import DishCreate, DishResponse
+from core.db import get_db
+from core.models.base import Dish
+from dishes.schemas import DishCreate, DishResponse
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound

@@ -1,9 +1,9 @@
-from application.core.db import get_db
-from application.core.models.base import Dish, Submenu
+from core.db import get_db
+from core.models.base import Dish, Submenu
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
-from application.submenus.schemas import SubmenuCreate, SubmenuResponse
+from submenus.schemas import SubmenuCreate, SubmenuResponse
 from sqlalchemy import func, select
 
 
