@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class SubmenuCreate(BaseModel):
@@ -7,8 +8,8 @@ class SubmenuCreate(BaseModel):
 
 
 class SubmenuResponse(BaseModel):
-    id: str
-    menu_id: str
+    id: UUID
+    menu_id: UUID
     title: str
     description: str
     dishes_count: int

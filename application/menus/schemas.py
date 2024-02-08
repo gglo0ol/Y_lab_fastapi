@@ -1,8 +1,9 @@
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class MenuResponse(BaseModel):
-    id: str
+    id: UUID
     title: str
     description: str
     submenus_count: int

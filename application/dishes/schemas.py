@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class DishCreate(BaseModel):
@@ -8,8 +9,8 @@ class DishCreate(BaseModel):
 
 
 class DishResponse(BaseModel):
-    id: str
-    submenu_id: str
+    id: UUID
+    submenu_id: UUID
     title: str
     description: str
     price: str

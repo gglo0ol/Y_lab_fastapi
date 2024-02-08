@@ -1,34 +1,29 @@
-from uuid import uuid4
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-from core.config import REDIS_URL, settings
-from redis import ConnectionPool, Redis
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from redis.asyncio import from_url
+from application.core.config import connection_db, REDIS_URL
+
 
 Base = declarative_base()
-engine = create_engine(settings.connection_db)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_async_engine(url=connection_db)
+AsyncLocalSession = sessionmaker(
+    autoflush=False, autocommit=False, bind=engine, class_=AsyncSession
+)
 
 
-# Dependency to get the database session
-def get_db() -> Session:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db():
+    async with AsyncLocalSession() as async_session:
+        yield async_session
 
 
-def get_uuid() -> str:
-    return str(uuid4())
+async def init_db():
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
 
 
-def create_redis() -> ConnectionPool:
-    return ConnectionPool.from_url(REDIS_URL)
-
-
-pool = create_redis()
-
-
-def get_redis() -> Redis:
-    return Redis(connection_pool=pool)
+async def get_redis():
+    redis = from_url(REDIS_URL)
+    async with redis as redis:
+        yield redis
