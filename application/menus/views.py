@@ -1,7 +1,8 @@
 from fastapi import Depends, APIRouter, HTTPException, BackgroundTasks
 from sqlalchemy.exc import NoResultFound
+from typing import Sequence
 
-from application.menus.schemas import MenuCreate, MenuResponse
+from application.menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
 from application.menus.service_repository import MenuService
 
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
@@ -92,3 +93,18 @@ async def delete_menu_endpoint(
         return await repo.delete_menu(menu_id=menu_id, background_task=background_task)
     except NoResultFound as error:
         raise HTTPException(status_code=404, detail=error.args[0])
+
+
+@router.get(
+    "tree",
+    status_code=200,
+    summary="Возвращает полное древо меню (все подменю и блюда)",
+    response_model=Sequence[MenuSubmenuDishes],
+)
+async def menu_submenu_dishes(
+    background_task: BackgroundTasks,
+    repo: MenuService = Depends(),
+) -> Sequence[MenuSubmenuDishes]:
+    return await repo.get_all_menu_and_submenu_and_dishes(
+        background_task=background_task
+    )

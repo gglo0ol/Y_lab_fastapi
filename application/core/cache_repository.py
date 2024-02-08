@@ -7,11 +7,12 @@ from core.config import (
     MENUS_URL,
     SUBMENU_URL,
     SUBMENUS_URL,
+    TREE_URL,
 )
 from core.db import get_redis
 from dishes.schemas import DishResponse
 from fastapi import Depends
-from menus.schemas import MenuResponse
+from menus.schemas import MenuResponse, MenuSubmenuDishes
 from redis.asyncio import Redis
 from submenus.schemas import SubmenuResponse
 
@@ -182,3 +183,13 @@ class CacheRepository:
         )
         await self.delete_all_menu()
         await self.delete_all_submenus(menu_id=menu_id)
+
+    async def get_menu_and_submenu_and_dishes(self) -> MenuSubmenuDishes | None:
+        cache = await self.cacher.get(TREE_URL)
+        if cache:
+            item = pickle.loads(cache)
+            return item
+        return None
+
+    async def set_menu_and_submenu_and_dishes(self, item: MenuSubmenuDishes) -> None:
+        await self.cacher.set(name=TREE_URL, value=item)

@@ -1,10 +1,12 @@
 from application.core.db import get_db
 from application.core.models.base import Dish, Menu, Submenu
 from fastapi import Depends
-from application.menus.schemas import MenuCreate, MenuResponse
+from application.menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import selectinload
+from typing import Sequence
 
 
 class MenuRepository:
@@ -102,3 +104,19 @@ class MenuRepository:
             return {"status": "true", "message": "The menu has been deleted"}
         else:
             raise NoResultFound("Menu not found")
+
+    async def get_all_menu_and_submenu_and_dishes_data(self) -> Sequence[Menu]:
+        result = (
+            (
+                await self.db.execute(
+                    select(Menu).options(
+                        selectinload(Menu.submenus).options(
+                            selectinload(Submenu.dishes)
+                        )
+                    )
+                )
+            )
+            .scalars()
+            .fetchall()
+        )
+        return result

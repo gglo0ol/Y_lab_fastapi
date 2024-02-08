@@ -22,5 +22,6 @@ SUBMENUS_URL = "/{menu_id}/submenus"
 SUBMENU_URL = "/{menu_id}/submenus/{submenu_id}"
 DISHES_URL = "/{menu_id}/submenus/{submenu_id}/dishes"
 DISH_URL = "/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}"
+TREE_URL = "/tree"
 
 connection_db = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:5432/{POSTGRES_DB}"
