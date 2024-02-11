@@ -8,6 +8,10 @@ class SubmenuCreate(BaseModel):
     description: str
 
 
+class SubmenuCreateWithId(SubmenuCreate):
+    id: UUID | None = None
+
+
 class SubmenuResponse(BaseModel):
     id: UUID
     menu_id: UUID

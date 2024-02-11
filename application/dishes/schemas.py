@@ -19,13 +19,17 @@ class DishCreate(BaseModel):
     discount: int
 
 
+class DishCreateWithId(DishCreate):
+    id: UUID | None = None
+
+
 class DishResponse(BaseModel):
     id: UUID
     submenu_id: UUID
     title: str
     description: str
     price: str
-    discount: int
+    discount: int = 0
 
     # @field_validator("price")
     # @classmethod

@@ -16,6 +16,10 @@ class MenuCreate(BaseModel):
     description: str
 
 
+class MenuCreateWithId(MenuCreate):
+    id: UUID | None = None
+
+
 class MenuSubmenuDishes(MenuCreate):
     id: UUID
     submenus: list[SubmenuDishes]

@@ -3,7 +3,7 @@ from core.models.base import Dish, Submenu
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
-from submenus.schemas import SubmenuCreate, SubmenuResponse
+from submenus.schemas import SubmenuCreate, SubmenuResponse, SubmenuCreateWithId
 from sqlalchemy import func, select
 
 
@@ -48,10 +48,13 @@ class SubmenuRepository:
         ]
 
     async def create_submenu(
-        self, menu_id: str, data: SubmenuCreate
+        self, menu_id: str, data: SubmenuCreateWithId
     ) -> SubmenuResponse:
         db_submenu = Submenu(
-            menu_id=menu_id, title=data.title, description=data.description
+            menu_id=menu_id,
+            title=data.title,
+            description=data.description,
+            id=data.id,
         )
         self.db.add(db_submenu)
         await self.db.commit()

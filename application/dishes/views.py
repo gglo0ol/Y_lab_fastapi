@@ -1,4 +1,4 @@
-from dishes.schemas import DishCreate, DishResponse
+from dishes.schemas import DishCreate, DishResponse, DishCreateWithId
 from dishes.service_repository import DishesService
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm.exc import NoResultFound
@@ -15,7 +15,7 @@ async def create_dish_endpoint(
     background_task: BackgroundTasks,
     menu_id: str,
     submenu_id: str,
-    data_in: DishCreate,
+    data_in: DishCreateWithId,
     repo: DishesService = Depends(),
 ) -> DishResponse:
     return await repo.create_dish(

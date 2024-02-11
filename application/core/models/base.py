@@ -6,7 +6,7 @@ from uuid import uuid4
 
 class Menu(Base):
     __tablename__ = "menus"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     title = Column(String)
     description = Column(String)
     submenus = relationship(

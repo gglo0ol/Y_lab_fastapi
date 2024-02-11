@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm.exc import NoResultFound
-from submenus.schemas import SubmenuCreate, SubmenuResponse
+from submenus.schemas import SubmenuCreate, SubmenuResponse, SubmenuCreateWithId
 from submenus.servise_repository import SubmenuService
 
 router = APIRouter(tags=["Submenus"], prefix="/api/v1/menus/{menu_id}/submenus")
@@ -15,7 +15,7 @@ router = APIRouter(tags=["Submenus"], prefix="/api/v1/menus/{menu_id}/submenus")
 async def create_submenu_endpoint(
     background_task: BackgroundTasks,
     menu_id: str,
-    data_in: SubmenuCreate,
+    data_in: SubmenuCreateWithId,
     repo: SubmenuService = Depends(),
 ) -> SubmenuResponse:
     return await repo.create_submenu(

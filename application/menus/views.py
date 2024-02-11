@@ -2,7 +2,7 @@ from fastapi import Depends, APIRouter, HTTPException, BackgroundTasks
 from sqlalchemy.exc import NoResultFound
 from typing import Sequence
 
-from menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes
+from menus.schemas import MenuCreate, MenuResponse, MenuSubmenuDishes, MenuCreateWithId
 from menus.service_repository import MenuService
 
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
 )
 async def create_menu_endpoint(
     background_task: BackgroundTasks,
-    data: MenuCreate,
+    data: MenuCreateWithId,
     repo: MenuService = Depends(),
 ) -> MenuResponse:
     return await repo.create_menu(data, background_task=background_task)

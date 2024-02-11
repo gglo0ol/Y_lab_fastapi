@@ -1,6 +1,6 @@
 from core.db import get_db
 from core.models.base import Dish
-from dishes.schemas import DishCreate, DishResponse
+from dishes.schemas import DishCreate, DishCreateWithId
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
@@ -14,7 +14,7 @@ class DishesRepository:
     async def create_dish(
         self,
         submenu_id: str,
-        data: DishCreate,
+        data: DishCreateWithId,
     ) -> Dish:
         db_dish = Dish(
             submenu_id=submenu_id,
@@ -22,6 +22,7 @@ class DishesRepository:
             description=data.description,
             price=data.price,
             discount=data.discount,
+            id=data.id,
         )
         self.db.add(db_dish)
         await self.db.commit()

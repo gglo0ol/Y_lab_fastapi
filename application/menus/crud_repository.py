@@ -1,7 +1,7 @@
 from core.db import get_db
 from core.models.base import Dish, Menu, Submenu
 from fastapi import Depends
-from menus.schemas import MenuCreate, MenuResponse
+from menus.schemas import MenuCreate, MenuResponse, MenuCreateWithId
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
@@ -73,8 +73,8 @@ class MenuRepository:
         db_menu = (await self.db.execute(select(Menu))).scalars()
         return [await self.get_menu_data(menu_id=menu.id) for menu in db_menu]
 
-    async def create_menu(self, data: MenuCreate) -> MenuResponse:
-        db_menu = Menu(title=data.title, description=data.description)
+    async def create_menu(self, data: MenuCreateWithId) -> MenuResponse:
+        db_menu = Menu(title=data.title, description=data.description, id=data.id)
         self.db.add(db_menu)
         await self.db.commit()
         await self.db.refresh(db_menu)
