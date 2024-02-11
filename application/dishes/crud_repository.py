@@ -15,19 +15,20 @@ class DishesRepository:
         self,
         submenu_id: str,
         data: DishCreate,
-    ) -> DishResponse:
+    ) -> Dish:
         db_dish = Dish(
             submenu_id=submenu_id,
             title=data.title,
             description=data.description,
             price=data.price,
+            discount=data.discount,
         )
         self.db.add(db_dish)
         await self.db.commit()
         await self.db.refresh(db_dish)
         return await self.get_dish_data(submenu_id=submenu_id, dish_id=db_dish.id)
 
-    async def get_dish_data(self, submenu_id: str, dish_id: str) -> DishResponse:
+    async def get_dish_data(self, submenu_id: str, dish_id: str) -> Dish:
         db_dish = (
             await self.db.execute(
                 select(Dish).where(Dish.submenu_id == submenu_id, Dish.id == dish_id)
@@ -35,18 +36,19 @@ class DishesRepository:
         ).scalar()
 
         if db_dish:
-            item = {
-                "id": db_dish.id,
-                "submenu_id": db_dish.submenu_id,
-                "title": db_dish.title,
-                "description": db_dish.description,
-                "price": db_dish.price,
-            }
-            return DishResponse(**item)
+            # item = {
+            #     "id": db_dish.id,
+            #     "submenu_id": db_dish.submenu_id,
+            #     "title": db_dish.title,
+            #     "description": db_dish.description,
+            #     "price": db_dish.price,
+            #     "discount": db_dish.discount,
+            # }
+            return db_dish
         else:
             raise NoResultFound("dish not found")
 
-    async def get_all_dishes_data(self, submenu_id: str) -> list[DishResponse]:
+    async def get_all_dishes_data(self, submenu_id: str) -> list[Dish]:
         db_dish = (
             await self.db.execute(select(Dish).where(Dish.submenu_id == submenu_id))
         ).scalars()
@@ -59,7 +61,7 @@ class DishesRepository:
         self,
         dish_id: str,
         data: DishCreate,
-    ) -> DishResponse | dict:
+    ) -> Dish | dict:
         db_dish = (
             await self.db.execute(select(Dish).where(Dish.id == dish_id))
         ).scalar()

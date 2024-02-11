@@ -1,5 +1,5 @@
 from core.db import Base
-from sqlalchemy import Column, ForeignKey, String, UUID
+from sqlalchemy import Column, ForeignKey, String, UUID, Integer
 from sqlalchemy.orm import relationship
 from uuid import uuid4
 
@@ -33,5 +33,6 @@ class Dish(Base):
     title = Column(String)
     description = Column(String)
     price = Column(String)
+    discount = Column(Integer, default=100)
 
     submenu = relationship("Submenu", back_populates="dishes")

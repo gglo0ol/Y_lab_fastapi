@@ -1,6 +1,7 @@
 from core.cache_repository import CacheRepository
 from dishes.crud_repository import DishesRepository
 from dishes.schemas import DishCreate, DishResponse
+from core.models.base import Dish
 from fastapi import Depends, BackgroundTasks
 
 
@@ -17,7 +18,7 @@ class DishesService:
         submenu_id: str,
         dish_id: str,
         background_task: BackgroundTasks,
-    ) -> DishResponse:
+    ) -> Dish:
         cache = await self.cacher.get_dish_by_id(
             menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id
         )
@@ -39,7 +40,7 @@ class DishesService:
         submenu_id: str,
         data: DishCreate,
         background_task: BackgroundTasks,
-    ) -> DishResponse:
+    ) -> Dish:
         item = await self.crud.create_dish(submenu_id=submenu_id, data=data)
         dish_id = item.id
         background_task.add_task(
@@ -55,7 +56,7 @@ class DishesService:
 
     async def get_all_dishes(
         self, menu_id: str, submenu_id: str, background_task: BackgroundTasks
-    ) -> list[DishResponse]:
+    ) -> list[Dish]:
         cache = await self.cacher.get_all_dishes(menu_id=menu_id, submenu_id=submenu_id)
         if cache:
             return cache
@@ -75,7 +76,7 @@ class DishesService:
         dish_id: str,
         data: DishCreate,
         background_task: BackgroundTasks,
-    ) -> DishResponse | dict:
+    ) -> Dish | dict:
         item = await self.crud.update_dish_data(dish_id=dish_id, data=data)
         background_task.add_task(
             self.cacher.delete_dish_by_id,
