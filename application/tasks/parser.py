@@ -4,7 +4,9 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 class Parser:
     def __init__(self):
-        self.data_in: Worksheet = load_workbook(filename="admin/Menu.xlsx").active
+        self.data_in: Worksheet = load_workbook(
+            filename="/Users/gglol/PycharmProjects/Y_lab_fastapi_Test/application/admin/Menu.xlsx"
+        ).active
         self.data_out = []
 
     def get_menu_data(self, row: int) -> dict | None:
@@ -37,7 +39,7 @@ class Parser:
             self.data_in[f"D{row}"].value,
         )
         data = {
-            "submenu_id": submenu_id,
+            "id": submenu_id,
             "title": submenu_title,
             "description": submenu_description,
             "dishes": [],
@@ -62,7 +64,7 @@ class Parser:
             )
             dish_discount = self.data_in[f"G{row}"].value or 0
             data = {
-                "dish_id": dish_id,
+                "id": dish_id,
                 "title": dish_title,
                 "description": dish_description,
                 "price": dish_price,
