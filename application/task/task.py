@@ -8,8 +8,9 @@ from core.config import (
     RABBITMQ_DEFAULT_USER,
     RABBITMQ_HOST,
 )
-from tasks.parser import Parser
-from tasks.updater import UpdateBase
+from task.parser import Parser
+from task.updater import UpdateBase
+
 
 celery = Celery(
     "task",
@@ -20,20 +21,17 @@ celery = Celery(
 )
 
 
-# @celery.task(
-#     default_retry_delay=15,
-#     max_retries=None,
-# )
+@celery.task(
+    default_retry_delay=15,
+    max_retries=None,
+)
 def update():
     try:
         parser = Parser()
-        parser_data = parser.start_parser()
-        updater = UpdateBase(parser_data)
+        data = parser.start_parser()
+        updater = UpdateBase(data)
         updater.start_update()
     except Exception as error:
         logging.error(error)
-    # finally:
-    #     update.retry()
-
-
-update()
+    finally:
+        update.retry()

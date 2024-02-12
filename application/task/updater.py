@@ -32,8 +32,8 @@ class UpdateBase:
     def get_list_of_submenus_id(self, menu_id: str) -> list[str]:
         r = requests.get(url=LINK + SUBMENUS_URL.format(menu_id=menu_id))
         if r.json():
-            list_of_menus = [item["id"] for item in r.json()]
-            return list_of_menus
+            list_of_submenus = [item["id"] for item in r.json()]
+            return list_of_submenus
         return []
 
     def get_list_of_dishes_id(self, menu_id: str, submenu_id: str) -> list[str]:
@@ -41,8 +41,8 @@ class UpdateBase:
             url=LINK + DISHES_URL.format(menu_id=menu_id, submenu_id=submenu_id)
         )
         if r.json():
-            list_of_menus = [item["id"] for item in r.json()]
-            return list_of_menus
+            list_of_dishes = [item["id"] for item in r.json()]
+            return list_of_dishes
         return []
 
     def delete_menu(self, menu_id: str) -> None:
@@ -81,17 +81,16 @@ class UpdateBase:
     def update_dish(
         self, menu_id: str, submenu_id: str, dish_id: str, update_data: dict
     ) -> None:
+        discount = update_data.get("discount", 0)
         data = {
             "title": update_data["title"],
             "description": update_data["description"],
             "price": str(update_data["price"]),
-            "discount": update_data["discount"],
+            "discount": discount,
         }
         update_request = requests.patch(
             url=LINK
-            + SUBMENU_URL.format(
-                menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id
-            ),
+            + DISH_URL.format(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id),
             json=data,
         )
 
@@ -114,31 +113,28 @@ class UpdateBase:
         )
 
     def create_dish(self, menu_id: str, submenu_id: str, data_in: dict) -> None:
+        discount = data_in.get("discount", 0)
         data = {
             "id": data_in["id"],
             "title": data_in["title"],
             "description": data_in["description"],
             "price": str(data_in["price"]),
-            "discount": data_in["discount"],
+            "discount": discount,
         }
         create_response = requests.post(
             url=LINK + DISHES_URL.format(menu_id=menu_id, submenu_id=submenu_id),
             json=data,
         )
 
-    def check_menu_data(self, menu_id: str):
-        menu_from_data = self.data
-
-    def start_update(self):
+    def start_update(self) -> None:
         list_of_menus = self.get_list_of_menus_id()
         if list_of_menus:
-            list_of_corrent_menu = list(map(lambda item: item["id"], self.data))
-            for id in list_of_menus:
-                if id not in list_of_corrent_menu:
-                    self.delete_menu(menu_id=id)
+            list_of_corrent_menu = [item["id"] for item in self.data]
+            for m_id in list_of_menus:
+                if m_id not in list_of_corrent_menu:
+                    self.delete_menu(menu_id=m_id)
 
         for menus in self.data:
-            print(menus)
             menu_id = menus["id"]
             if menu_id not in list_of_menus:
                 self.create_menu(data_in=menus)
@@ -147,15 +143,12 @@ class UpdateBase:
 
             submenus_list = self.get_list_of_submenus_id(menu_id=menu_id)
             if submenus_list:
-                list_of_corrent_submenu = list(
-                    map(lambda item: item["id"], menus["submenus"])
-                )
-                for id in submenus_list:
-                    if id not in list_of_corrent_submenu:
-                        self.delete_submenu(menu_id=menu_id, submenu_id=id)
+                list_of_corrent_submenu = [item["id"] for item in menus["submenus"]]
+                for s_id in submenus_list:
+                    if s_id not in list_of_corrent_submenu:
+                        self.delete_submenu(menu_id=menu_id, submenu_id=s_id)
 
             for submenus in menus["submenus"]:
-                print(submenus)
                 submenu_id = submenus["id"]
                 if submenu_id not in submenus_list:
                     self.create_submenu(menu_id=menu_id, data_in=submenus)
@@ -168,17 +161,14 @@ class UpdateBase:
                     menu_id=menu_id, submenu_id=submenu_id
                 )
                 if dishes_list:
-                    list_of_corrent_dishes = list(
-                        map(lambda item: item["id"], submenus["dishes"])
-                    )
-                    for id in dishes_list:
-                        if id not in list_of_corrent_dishes:
+                    list_of_corrent_dishes = [item["id"] for item in submenus["dishes"]]
+                    for d_id in dishes_list:
+                        if d_id not in list_of_corrent_dishes:
                             self.delete_dish(
-                                menu_id=menu_id, submenu_id=submenu_id, dish_id=id
+                                menu_id=menu_id, submenu_id=submenu_id, dish_id=d_id
                             )
 
                 for dish in submenus["dishes"]:
-                    print(dish)
                     dish_id = dish["id"]
                     if dish_id not in dishes_list:
                         self.create_dish(

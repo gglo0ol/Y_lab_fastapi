@@ -88,7 +88,7 @@ services:
     restart: always
     networks:
       - ylab_network
-    command: [ "celery", "--app=tasks.task:celery", "worker", "-l", "INFO" ]
+    command: [ "celery", "--app=task.task:celery", "worker", "-l", "INFO" ]
     depends_on:
       - backend
 networks:
