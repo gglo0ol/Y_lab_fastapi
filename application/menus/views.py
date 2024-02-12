@@ -8,6 +8,21 @@ from menus.service_repository import MenuService
 router = APIRouter(prefix="/api/v1/menus", tags=["Menu"])
 
 
+@router.get(
+    "/tree/",
+    status_code=200,
+    summary="Возвращает полное древо меню (все подменю и блюда)",
+    response_model=Sequence[MenuSubmenuDishes],
+)
+async def menu_submenu_dishes(
+    background_task: BackgroundTasks,
+    repo: MenuService = Depends(),
+) -> Sequence[MenuSubmenuDishes]:
+    return await repo.get_all_menu_and_submenu_and_dishes(
+        background_task=background_task
+    )
+
+
 @router.post(
     "/", status_code=201, response_model=MenuResponse, summary="Создать новое меню"
 )
@@ -93,18 +108,3 @@ async def delete_menu_endpoint(
         return await repo.delete_menu(menu_id=menu_id, background_task=background_task)
     except NoResultFound as error:
         raise HTTPException(status_code=404, detail=error.args[0])
-
-
-@router.get(
-    "tree",
-    status_code=200,
-    summary="Возвращает полное древо меню (все подменю и блюда)",
-    response_model=Sequence[MenuSubmenuDishes],
-)
-async def menu_submenu_dishes(
-    background_task: BackgroundTasks,
-    repo: MenuService = Depends(),
-) -> Sequence[MenuSubmenuDishes]:
-    return await repo.get_all_menu_and_submenu_and_dishes(
-        background_task=background_task
-    )

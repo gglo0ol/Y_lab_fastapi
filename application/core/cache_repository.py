@@ -1,4 +1,5 @@
 import pickle
+from typing import Sequence
 
 from core.config import (
     DISH_URL,
@@ -191,5 +192,8 @@ class CacheRepository:
             return item
         return None
 
-    async def set_menu_and_submenu_and_dishes(self, item: MenuSubmenuDishes) -> None:
-        await self.cacher.set(name=TREE_URL, value=item)
+    async def set_menu_and_submenu_and_dishes(
+        self, item: Sequence[MenuSubmenuDishes]
+    ) -> None:
+        data = pickle.dumps(item)
+        await self.cacher.set(name=TREE_URL, value=data)

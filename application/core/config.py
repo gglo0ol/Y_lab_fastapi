@@ -21,7 +21,7 @@ RABBITMQ_DEFAULT_PASS = os.getenv("RABBITMQ_DEFAULT_PASS")
 RABBITMQ_DEFAULT_PORT = os.getenv("RABBITMQ_DEFAULT_PORT")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
 
-CELERY_STATUS = "True"
+CELERY_STATUS = os.getenv("CELERY_STATUS")
 
 # LINK = "http://0.0.0.0:8000/api/v1/menus"
 LINK = "http://backend:8000/api/v1/menus/"

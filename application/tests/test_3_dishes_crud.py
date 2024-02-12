@@ -48,6 +48,7 @@ async def test_create_dish(
     assert dish_data["title"] == data_dishes_create["title"]
     assert dish_data["description"] == data_dishes_create["description"]
     assert dish_data["price"] == data_dishes_create["price"]
+    assert dish_data["discount"] == data_dishes_create["discount"]
     saved_data["dish"] = dish_data
 
 
@@ -83,6 +84,7 @@ async def test_get_dish(client: AsyncClient, saved_data: dict) -> None:
     assert dish_data["title"] == saved_data["dish"]["title"]
     assert dish_data["description"] == saved_data["dish"]["description"]
     assert dish_data["price"] == saved_data["dish"]["price"]
+    assert dish_data["discount"] == saved_data["dish"]["discount"]
 
 
 async def test_update_dish(
@@ -119,6 +121,7 @@ async def test_update_dish(
     assert check_updated_dish_data["title"] == data_dishes_update["title"]
     assert check_updated_dish_data["description"] == data_dishes_update["description"]
     assert check_updated_dish_data["price"] == data_dishes_update["price"]
+    assert check_updated_dish_data["discount"] == data_dishes_update["discount"]
 
 
 async def test_delete_dish(client: AsyncClient, saved_data: dict) -> None:

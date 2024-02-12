@@ -53,6 +53,7 @@ async def test_create_dish_1(
         "title": "My dish 2",
         "description": "My dish description 2",
         "price": "13.50",
+        "discount": 0,
     }
     menu_id = saved_data["menu"]["id"]
     submenu_id = saved_data["submenu"]["id"]
@@ -68,6 +69,7 @@ async def test_create_dish_1(
     assert dish_data["title"] == json_dish_1["title"]
     assert dish_data["description"] == json_dish_1["description"]
     assert dish_data["price"] == json_dish_1["price"]
+    assert dish_data["discount"] == json_dish_1["discount"]
     saved_data["dish_1"] = dish_data
 
 

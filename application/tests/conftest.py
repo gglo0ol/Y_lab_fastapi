@@ -87,6 +87,7 @@ def data_dishes_create():
         "title": "My dish 1",
         "description": "My dish description 1",
         "price": "12.50",
+        "discount": 0,
     }
     return json_dishes_create
 
@@ -97,6 +98,7 @@ def data_dishes_update():
         "title": "My updated dish 1",
         "description": "My updated dish description 1",
         "price": "14.50",
+        "discount": 0,
     }
     return json_dishes_update
 
