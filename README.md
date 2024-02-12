@@ -245,12 +245,43 @@ _**CRUD – create/update/retrieve/delete._
 <details>
 <summary>Установка</summary>
 
-Синхронизация с файлом Menu реализованна локальным способом (файл Menu.xlsx находится по пути application/admin/Menu.xlsx).
+Синхронизация с файлом Menu осуществляется из локального хранилища (файл Menu.xlsx находится по пути application/admin/Menu.xlsx).
 Синхранизация происходит каждые 15 секунд.
 
 Программа изначальна запускается с фоновым обновлением из файла Menu.xlsx. Чтобы запустить приложение с возможностью в ручную
-прогнать тесты из postmana нужно иправить значение переменно1 в файле .env (CELERY_STATUS=false).
+прогнать тесты из postmana нужно иправить значение переменно1 в файле .env (CELERY_STATUS=false) или отключить celery вручную.
 
 Id позииций в файле Menu.xlsx должны быть UUID формата, иначе будет ошибка при обновлении данных.
+
+* Клонируем проект из Git. Для этого вводим команду
+
+`git clone https://github.com/gglo0ol/Y_lab_fastapi`
+
+* Заходим в папку с проектом.
+* \* Для запуска тестов вводим в терминале команду
+
+`docker compose -f docker-compose-test.yml up -d && docker logs --follow backend && docker compose -f docker-compose-test.yml down -v`
+
+при этом поднимается тестовая БД и логи тестов у нас будут отображаться в терминале
+
+* Чтобы запустить само приложение с БД
+
+`docker compose up -d`
+
+* Прложение будет доступно по ссылке
+
+`http://0.0.0.0:8000/docs`
+
+* Чтобы завершить выполнение
+
+`docker compose down -v`
+
+Чтобы установить pre-commit хуки, нужно выполнить команду
+
+` pre-commit run --all-files`
+
+При этом удалятся все временные файлы
+
+
 </details>
 </details>
