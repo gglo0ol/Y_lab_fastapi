@@ -25,7 +25,7 @@ celery = Celery(
     default_retry_delay=15,
     max_retries=None,
 )
-def update():
+def update() -> None:
     try:
         parser = Parser()
         data = parser.start_parser()

@@ -3,7 +3,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 
 class Parser:
-    def __init__(self):
+    def __init__(self) -> None:
         self.data_in: Worksheet = load_workbook(
             filename="/app/application/admin/Menu.xlsx"  # /app/application
         ).active
@@ -78,7 +78,7 @@ class Parser:
             }
             return data
 
-    def start_parser(self):
+    def start_parser(self) -> list[dict] | list:
         self.data_out = []
         for i in range(self.data_in.min_row, self.data_in.max_row + 1):
             menu_id = self.data_in[f"A{i}"].value
