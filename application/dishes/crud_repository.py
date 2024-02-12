@@ -37,14 +37,6 @@ class DishesRepository:
         ).scalar()
 
         if db_dish:
-            # item = {
-            #     "id": db_dish.id,
-            #     "submenu_id": db_dish.submenu_id,
-            #     "title": db_dish.title,
-            #     "description": db_dish.description,
-            #     "price": db_dish.price,
-            #     "discount": db_dish.discount,
-            # }
             return db_dish
         else:
             raise NoResultFound("dish not found")

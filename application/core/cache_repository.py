@@ -188,8 +188,7 @@ class CacheRepository:
     async def get_menu_and_submenu_and_dishes(self) -> MenuSubmenuDishes | None:
         cache = await self.cacher.get(TREE_URL)
         if cache:
-            item = pickle.loads(cache)
-            return item
+            return cache
         return None
 
     async def set_menu_and_submenu_and_dishes(
