@@ -9,13 +9,6 @@ from core.config import (
     DISHES_URL,
     LINK,
 )
-from menus.schemas import MenuCreate
-from submenus.schemas import SubmenuCreate
-from dishes.schemas import DishCreate
-
-# from menus.service_repository import MenuService
-# from submenus.servise_repository import SubmenuService
-# from dishes.service_repository import DishesService
 
 
 class UpdateBase:

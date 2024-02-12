@@ -33,7 +33,7 @@ class DishResponse(BaseModel):
 
     # @field_validator("price")
     # @classmethod
-    # def apply_discount(cls, v: str, values: ValidationInfo) -> str:
+    # def apply_discount(cls, v: str, values: dict) -> str:
     #     price = float(v.replace(",", "."))
     #     discount = values.data.get("discount")
     #     discounted_price = price - (price * discount / 100)
