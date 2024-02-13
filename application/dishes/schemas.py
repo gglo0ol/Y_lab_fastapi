@@ -1,22 +1,16 @@
 from pydantic import (
     BaseModel,
-    field_validator,
-    validator,
-    ValidationInfo,
-    field_validator,
+    root_validator,
 )
 from core.models.base import Dish
 from uuid import UUID
-from contextlib import contextmanager
-from contextvars import ContextVar
-from typing import Any, Dict, Iterator
 
 
 class DishCreate(BaseModel):
     title: str
     description: str
     price: str
-    discount: int = 0
+    discount: int = 50
 
 
 class DishCreateWithId(DishCreate):
@@ -37,13 +31,17 @@ class DishResponseRead(BaseModel):
     submenu_id: UUID
     title: str
     description: str
-    price: str
     discount: int
+    price: str
 
-    # @field_validator("price")
-    # @classmethod
-    # def discount(cls, v: str, values: ValidationInfo) -> str:
-    #     price = float(v.replace(",", "."))
-    #     discount = values.data.get("discount")
-    #     discounted_price = price - (price * discount / 100)
-    #     return f"{discounted_price:.2f}"
+    @root_validator(pre=True)
+    @classmethod
+    def price_discount(cls, values: Dish):
+        price = values.price
+        price = float(price.replace(",", "."))
+        discount = values.discount
+
+        if price and discount:
+            discounted_price = round((price * (100 - discount) / 100), 2)
+            values.price = str(discounted_price)
+        return values
