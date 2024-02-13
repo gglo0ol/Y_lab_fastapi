@@ -36,7 +36,7 @@ class DishResponseRead(BaseModel):
 
     @root_validator(pre=True)
     @classmethod
-    def price_discount(cls, values: Dish):
+    def price_discount(cls, values: Dish) -> Dish:
         price = values.price
         price = float(price.replace(",", "."))
         discount = values.discount
