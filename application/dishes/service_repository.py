@@ -56,6 +56,10 @@ class DishesService:
             self.cacher.delete_all_dishes, menu_id=menu_id, submenu_id=submenu_id
         )
         background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
+        background_task.add_task(self.cacher.delete_menu_cache, menu_id=menu_id)
+        background_task.add_task(
+            self.cacher.delete_submenu_by_id, menu_id=menu_id, submenu_id=submenu_id
+        )
         return item
 
     async def get_all_dishes(
@@ -113,4 +117,8 @@ class DishesService:
             self.cacher.delete_all_dishes, menu_id=menu_id, submenu_id=submenu_id
         )
         background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
+        background_task.add_task(self.cacher.delete_menu_cache, menu_id=menu_id)
+        background_task.add_task(
+            self.cacher.delete_submenu_by_id, menu_id=menu_id, submenu_id=submenu_id
+        )
         return item

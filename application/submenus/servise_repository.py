@@ -42,6 +42,7 @@ class SubmenuService:
         background_task.add_task(self.cache.delete_all_menu)
         background_task.add_task(self.cache.delete_all_submenus, menu_id=menu_id)
         background_task.add_task(self.cache.delete_menu_and_submenu_and_dishes)
+        background_task.add_task(self.cache.delete_menu_cache, menu_id=menu_id)
         return item
 
     async def get_all_submenu(
@@ -88,4 +89,5 @@ class SubmenuService:
             self.cache.delete_all_dishes, menu_id=menu_id, submenu_id=submenu_id
         )
         background_task.add_task(self.cache.delete_menu_and_submenu_and_dishes)
+        background_task.add_task(self.cache.delete_menu_cache, menu_id=menu_id)
         return item
