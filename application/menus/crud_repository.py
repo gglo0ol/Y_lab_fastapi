@@ -81,7 +81,7 @@ class MenuRepository:
         return await self.get_menu_data(menu_id=db_menu.id)
 
     async def update_menu_data(
-        self, menu_id: str, data: MenuCreate
+        self, menu_id: str, data: MenuCreate | dict
     ) -> MenuResponse | dict:
         db_menu = (
             await self.db.execute(select(Menu).where(Menu.id == menu_id))

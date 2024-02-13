@@ -64,7 +64,7 @@ class SubmenuRepository:
     async def update_submenu_data(
         self,
         submenu_id: str,
-        data: SubmenuCreate,
+        data: SubmenuCreate | dict,
     ) -> SubmenuResponse | dict:
         db_submenu = (
             await self.db.execute(select(Submenu).filter(Submenu.id == submenu_id))

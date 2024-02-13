@@ -8,6 +8,7 @@ from core.config import (
     RABBITMQ_DEFAULT_USER,
     RABBITMQ_HOST,
 )
+
 from task.parser import Parser
 from task.updater import UpdateBase
 
@@ -25,7 +26,7 @@ celery = Celery(
     default_retry_delay=15,
     max_retries=None,
 )
-def update() -> None:
+def update():
     try:
         parser = Parser()
         data = parser.start_parser()
@@ -35,3 +36,18 @@ def update() -> None:
         logging.error(error)
     finally:
         update.retry()
+
+
+# parser = Parser()
+# data = parser.start_parser()
+# for menu in data:
+#     menu_id = menu["id"]
+#     print(menu)
+#     for submenu in menu["submenus"]:
+#         print(f"\t{submenu}")
+#         for dish in submenu["dishes"]:
+#             print(f"\t\t{dish}")
+#
+#
+# updater = UpdateBase(data)
+# updater.start_update()

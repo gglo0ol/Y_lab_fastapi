@@ -5,7 +5,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 class Parser:
     def __init__(self) -> None:
         self.data_in: Worksheet = load_workbook(
-            filename="/app/application/admin/Menu.xlsx"  # /app/application
+            filename="/app/application/admin/Menu.xlsx"  # /app/application/admin/
         ).active
         self.data_out = []
 

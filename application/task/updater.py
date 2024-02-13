@@ -43,7 +43,7 @@ class UpdateBase:
 
     def delete_submenu(self, menu_id: str, submenu_id: str) -> None:
         delete_request = requests.delete(
-            url=LINK + MENU_URL.format(menu_id=menu_id, submenu_id=submenu_id)
+            url=LINK + SUBMENU_URL.format(menu_id=menu_id, submenu_id=submenu_id)
         )
 
     def delete_dish(self, menu_id: str, submenu_id: str, dish_id: str) -> None:
@@ -135,6 +135,7 @@ class UpdateBase:
                 self.update_menu(menu_id=menu_id, update_data=menus)
 
             submenus_list = self.get_list_of_submenus_id(menu_id=menu_id)
+
             if submenus_list:
                 list_of_corrent_submenu = [item["id"] for item in menus["submenus"]]
                 for s_id in submenus_list:

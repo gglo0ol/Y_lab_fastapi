@@ -4,6 +4,7 @@ from core.db import init_db
 from menus.views import router as menu_router
 from submenus.views import router as submenu_router
 from dishes.views import router as dish_router
+
 from task.task import update
 from core.config import CELERY_STATUS
 

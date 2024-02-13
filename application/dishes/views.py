@@ -1,4 +1,4 @@
-from dishes.schemas import DishCreate, DishResponse, DishCreateWithId
+from dishes.schemas import DishCreate, DishResponse, DishCreateWithId, DishResponseRead
 from dishes.service_repository import DishesService
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm.exc import NoResultFound
@@ -9,7 +9,7 @@ router = APIRouter(
 
 
 @router.post(
-    "/", status_code=201, response_model=DishResponse, summary="Создать новое блюдо"
+    "/", status_code=201, response_model=DishResponseRead, summary="Создать новое блюдо"
 )
 async def create_dish_endpoint(
     background_task: BackgroundTasks,
@@ -17,7 +17,7 @@ async def create_dish_endpoint(
     submenu_id: str,
     data_in: DishCreateWithId,
     repo: DishesService = Depends(),
-) -> DishResponse:
+) -> DishResponseRead:
     return await repo.create_dish(
         menu_id=menu_id,
         submenu_id=submenu_id,
@@ -28,7 +28,7 @@ async def create_dish_endpoint(
 
 @router.get(
     "/{dish_id}",
-    response_model=DishResponse,
+    response_model=DishResponseRead,
     summary="Получить блюдо",
     responses={404: {"description": "Dish not found"}},
 )
@@ -38,7 +38,7 @@ async def get_dish_endpoint(
     submenu_id: str,
     dish_id: str,
     repo: DishesService = Depends(),
-) -> DishResponse:
+) -> DishResponseRead:
     try:
         return await repo.get_dish(
             menu_id=menu_id,
@@ -52,7 +52,7 @@ async def get_dish_endpoint(
 
 @router.patch(
     "/{dish_id}",
-    response_model=DishResponse,
+    response_model=DishResponseRead,
     summary="Обновить блюдо",
     responses={404: {"description": "Dish not found"}},
 )
@@ -63,7 +63,7 @@ async def update_dish_endpoint(
     dish_id: str,
     data_in: DishCreate,
     repo: DishesService = Depends(),
-) -> DishResponse | dict:
+) -> DishResponseRead | dict:
     try:
         return await repo.update_dish(
             menu_id=menu_id,
@@ -101,7 +101,7 @@ async def delete_dish_endpoint(
 
 @router.get(
     "/",
-    response_model=list[DishResponse],
+    response_model=list[DishResponseRead],
     summary="Получить список всех блюд данного подменю",
 )
 async def get_all_dishes_endpoint(
@@ -109,7 +109,7 @@ async def get_all_dishes_endpoint(
     menu_id: str,
     submenu_id: str,
     repo: DishesService = Depends(),
-) -> list[DishResponse]:
+) -> list[DishResponseRead]:
     return await repo.get_all_dishes(
         menu_id=menu_id, submenu_id=submenu_id, background_task=background_task
     )

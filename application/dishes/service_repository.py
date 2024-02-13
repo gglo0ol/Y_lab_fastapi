@@ -1,6 +1,6 @@
 from core.cache_repository import CacheRepository
 from dishes.crud_repository import DishesRepository
-from dishes.schemas import DishCreate, DishResponse
+from dishes.schemas import DishCreate, DishResponseRead
 from core.models.base import Dish
 from fastapi import Depends, BackgroundTasks
 
@@ -52,6 +52,10 @@ class DishesService:
         )
         background_task.add_task(self.cacher.delete_all_menu)
         background_task.add_task(self.cacher.delete_all_submenus, menu_id=menu_id)
+        background_task.add_task(
+            self.cacher.delete_all_dishes, menu_id=menu_id, submenu_id=submenu_id
+        )
+        background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
         return item
 
     async def get_all_dishes(
@@ -86,6 +90,10 @@ class DishesService:
         )
         background_task.add_task(self.cacher.delete_all_menu)
         background_task.add_task(self.cacher.delete_all_submenus, menu_id=menu_id)
+        background_task.add_task(
+            self.cacher.delete_all_dishes, menu_id=menu_id, submenu_id=submenu_id
+        )
+        background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
         return item
 
     async def delete_dish(
@@ -104,4 +112,5 @@ class DishesService:
         background_task.add_task(
             self.cacher.delete_all_dishes, menu_id=menu_id, submenu_id=submenu_id
         )
+        background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
         return item

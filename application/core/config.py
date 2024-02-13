@@ -23,7 +23,7 @@ RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
 
 CELERY_STATUS = os.getenv("CELERY_STATUS").lower() == "true"
 
-# LINK = "http://0.0.0.0:8000/api/v1/menus"
+# LINK = "http://0.0.0.0:8000/api/v1/menus/"
 LINK = "http://backend:8000/api/v1/menus/"
 MENUS_URL = ""
 MENU_URL = "{menu_id}/"

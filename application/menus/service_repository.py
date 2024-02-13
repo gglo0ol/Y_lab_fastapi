@@ -4,7 +4,7 @@ from typing import Sequence
 from core.cache_repository import CacheRepository
 from fastapi import Depends, BackgroundTasks
 from menus.crud_repository import MenuRepository
-from menus.schemas import MenuCreate, MenuResponse
+from menus.schemas import MenuCreate, MenuResponse, MenuCreateWithId
 from sqlalchemy.exc import NoResultFound
 from core.models.base import Menu
 
@@ -40,7 +40,7 @@ class MenuService:
 
     async def get_menu_submenus_and_dishes_count(
         self, menu_id: str, background_task: BackgroundTasks
-    ):
+    ) -> dict:
         cache = await self.cacher.get_menu_submenus_and_dishes_count(menu_id=menu_id)
         if cache:
             item = pickle.loads(cache)
@@ -57,14 +57,15 @@ class MenuService:
             raise NoResultFound("Menu not found")
 
     async def create_menu(
-        self, data: MenuCreate, background_task: BackgroundTasks
+        self, data: MenuCreateWithId, background_task: BackgroundTasks
     ) -> MenuResponse:
         item = await self.crud.create_menu(data)
         menu_id = item.id
         background_task.add_task(
-            self.cacher.create_menu_cache, menu_id=menu_id, item=item
+            self.cacher.create_menu_cache, menu_id=str(menu_id), item=item
         )
         background_task.add_task(self.cacher.delete_all_menu)
+        background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
         return item
 
     async def update_menu(
@@ -73,12 +74,15 @@ class MenuService:
         item = await self.crud.update_menu_data(menu_id=menu_id, data=data)
         background_task.add_task(self.cacher.delete_menu_cache, menu_id=menu_id)
         background_task.add_task(self.cacher.delete_all_menu)
+        background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
         return item
 
     async def delete_menu(self, menu_id: str, background_task: BackgroundTasks) -> dict:
         item = await self.crud.delete_menu_data(menu_id=menu_id)
         background_task.add_task(self.cacher.delete_all_menu)
         background_task.add_task(self.cacher.delete_menu_cache, menu_id=menu_id)
+        background_task.add_task(self.cacher.delete_menu_and_submenu_and_dishes)
+        background_task.add_task(self.cacher.delete_all_submenus, menu_id=menu_id)
         return item
 
     async def get_all_menu_and_submenu_and_dishes(

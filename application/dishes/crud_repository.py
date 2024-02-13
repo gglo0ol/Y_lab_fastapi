@@ -53,16 +53,17 @@ class DishesRepository:
     async def update_dish_data(
         self,
         dish_id: str,
-        data: DishCreate,
+        data: DishCreate | dict,
     ) -> Dish | dict:
         db_dish = (
             await self.db.execute(select(Dish).where(Dish.id == dish_id))
         ).scalar()
         if db_dish:
-            db_dish.title, db_dish.description, db_dish.price = (
+            db_dish.title, db_dish.description, db_dish.price, db_dish.discount = (
                 data.title,
                 data.description,
                 data.price,
+                data.discount,
             )
             self.db.add(db_dish)
             await self.db.commit()

@@ -29,11 +29,20 @@ class DishResponse(BaseModel):
     title: str
     description: str
     price: str
-    discount: int = 0
+    discount: int
+
+
+class DishResponseRead(BaseModel):
+    id: UUID
+    submenu_id: UUID
+    title: str
+    description: str
+    price: str
+    discount: int
 
     # @field_validator("price")
     # @classmethod
-    # def apply_discount(cls, v: str, values: ValidationInfo) -> str:
+    # def discount(cls, v: str, values: ValidationInfo) -> str:
     #     price = float(v.replace(",", "."))
     #     discount = values.data.get("discount")
     #     discounted_price = price - (price * discount / 100)

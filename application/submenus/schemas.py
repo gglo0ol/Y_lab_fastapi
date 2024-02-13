@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from uuid import UUID
-from dishes.schemas import DishResponse
+from dishes.schemas import DishResponseRead
 
 
 class SubmenuCreate(BaseModel):
@@ -22,4 +22,4 @@ class SubmenuResponse(BaseModel):
 
 class SubmenuDishes(SubmenuCreate):
     id: UUID
-    dishes: list[DishResponse]
+    dishes: list[DishResponseRead]

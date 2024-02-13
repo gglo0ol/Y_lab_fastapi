@@ -89,8 +89,6 @@ class CacheRepository:
         await self.cacher.set(
             name=SUBMENU_URL.format(menu_id=menu_id, submenu_id=submenu_id), value=data
         )
-        await self.delete_all_menu()
-        await self.delete_menu_cache(menu_id=menu_id)
 
     async def get_submenu_by_id(
         self, menu_id: str, submenu_id: str
@@ -114,8 +112,6 @@ class CacheRepository:
         await self.cacher.delete(
             SUBMENU_URL.format(menu_id=menu_id, submenu_id=submenu_id)
         )
-        await self.delete_all_menu()
-        await self.delete_menu_cache(menu_id=menu_id)
 
     async def delete_all_submenus(self, menu_id: str) -> None:
         await self.cacher.delete(SUBMENUS_URL.format(menu_id=menu_id))
@@ -130,10 +126,6 @@ class CacheRepository:
             ),
             value=item,
         )
-        await self.delete_all_menu()
-        await self.delete_all_submenus(menu_id=menu_id)
-        await self.delete_menu_cache(menu_id=menu_id)
-        await self.delete_submenu_by_id(menu_id=menu_id, submenu_id=submenu_id)
 
     async def set_all_dishes(
         self, menu_id: str, submenu_id: str, item: list[DishResponse]
@@ -173,17 +165,11 @@ class CacheRepository:
         await self.cacher.delete(
             DISH_URL.format(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id)
         )
-        await self.delete_all_menu()
-        await self.delete_all_submenus(menu_id=menu_id)
-        await self.delete_menu_cache(menu_id=menu_id)
-        await self.delete_submenu_by_id(menu_id=menu_id, submenu_id=submenu_id)
 
     async def delete_all_dishes(self, menu_id: str, submenu_id: str) -> None:
         await self.cacher.delete(
             DISHES_URL.format(menu_id=menu_id, submenu_id=submenu_id)
         )
-        await self.delete_all_menu()
-        await self.delete_all_submenus(menu_id=menu_id)
 
     async def get_menu_and_submenu_and_dishes(self) -> MenuSubmenuDishes | None:
         cache = await self.cacher.get(TREE_URL)
@@ -196,3 +182,6 @@ class CacheRepository:
     ) -> None:
         data = pickle.dumps(item)
         await self.cacher.set(name=TREE_URL, value=data)
+
+    async def delete_menu_and_submenu_and_dishes(self):
+        await self.cacher.delete(TREE_URL)
