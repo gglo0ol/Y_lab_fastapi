@@ -10,7 +10,7 @@ class DishCreate(BaseModel):
     title: str
     description: str
     price: str
-    discount: int = 50
+    discount: int = 0
 
 
 class DishCreateWithId(DishCreate):
