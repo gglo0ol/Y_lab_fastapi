@@ -50,7 +50,6 @@ class Parser:
             "dishes": [],
         }
         result.update(data)
-        # print(data)
         for i in range(row + 1, self.data_in.max_row + 1):
             menu_id = self.data_in[f"A{i}"].value
             submenu_id = self.data_in[f"B{i}"].value
